@@ -1,0 +1,49 @@
+# ==========================================================================
+# WordPress Core & Sensitive Configuration (OWASP Secret Hygiene)
+# ==========================================================================
+wp-config.php
+.htaccess
+.env
+.env.*
+
+# WordPress Core Directories & Root Bootstrap Files
+/wp-admin/
+/wp-includes/
+/index.php
+/license.txt
+/readme.html
+/wp-activate.php
+/wp-blog-header.php
+/wp-comments-post.php
+/wp-cron.php
+/wp-links-opml.php
+/wp-load.php
+/wp-login.php
+/wp-mail.php
+/wp-settings.php
+/wp-signup.php
+/wp-trackback.php
+/xmlrpc.php
+
+# WordPress Content (Ignore stock themes, plugins, uploads, and logs; keep cosmic-explorer)
+/wp-content/debug.log
+/wp-content/index.php
+/wp-content/languages/
+/wp-content/plugins/
+/wp-content/upgrade/
+/wp-content/uploads/
+/wp-content/themes/index.php
+/wp-content/themes/twentytwenty*/
+
+# ==========================================================================
+# Temporary Debug Artifacts & OS Metadata
+# ==========================================================================
+/check_patterns.php
+/page_output.html
+**/rendered-dom.html
+**/uzay-gorevleri-debug.html
+*.backup*
+*.log
+.DS_Store
+Thumbs.db
+node_modules/
