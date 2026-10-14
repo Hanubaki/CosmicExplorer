@@ -1,0 +1,25 @@
+<!-- wp:template-part {"slug":"header","tagName":"header","area":"header"} /-->
+
+<!-- wp:group {"tagName":"article","layout":{"type":"constrained"}} -->
+<article class="wp-block-group">
+	<!-- wp:post-featured-image {"align":"wide"} /-->
+	<!-- wp:post-title {"level":1,"fontSize":"hero"} /-->
+	
+	<!-- wp:group {"layout":{"type":"flex"}} -->
+	<div class="wp-block-group">
+		<!-- wp:post-date /-->
+		<!-- wp:post-terms {"term":"category"} /-->
+	</div>
+	<!-- /wp:group -->
+
+	<!-- wp:post-content /-->
+	
+	<!-- wp:separator -->
+	<hr class="wp-block-separator has-alpha-channel-opacity"/>
+	<!-- /wp:separator -->
+	
+	<!-- wp:comments /-->
+</article>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer","area":"footer"} /-->

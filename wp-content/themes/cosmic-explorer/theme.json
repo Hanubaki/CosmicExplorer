@@ -1,0 +1,152 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": true,
+    "layout": {
+      "contentSize": "840px",
+      "wideSize": "1280px"
+    },
+    "useRootPaddingAwareAlignments": true,
+    "color": {
+      "defaultPalette": false,
+      "defaultGradients": false,
+      "palette": [
+        { "slug": "space-black", "color": "#070b14", "name": "Space Black" },
+        { "slug": "nebula-purple", "color": "#1a1235", "name": "Nebula Purple" },
+        { "slug": "cosmic-violet", "color": "#7b2cbf", "name": "Cosmic Violet" },
+        { "slug": "starlight-cyan", "color": "#00f0ff", "name": "Starlight Cyan" },
+        { "slug": "solar-gold", "color": "#ffb703", "name": "Solar Gold" },
+        { "slug": "star-white", "color": "#f8f9fa", "name": "Star White" },
+        { "slug": "dust-gray", "color": "#94a3b8", "name": "Dust Gray" },
+        { "slug": "mars-red", "color": "#ef4444", "name": "Mars Red" },
+        { "slug": "aurora-green", "color": "#22c55e", "name": "Aurora Green" }
+      ],
+      "gradients": [
+        { "slug": "galaxy-radial", "gradient": "radial-gradient(ellipse at 50% 30%, #1e1145 0%, #070b14 100%)", "name": "Galaxy Radial" },
+        { "slug": "aurora-linear", "gradient": "linear-gradient(135deg, #7b2cbf 0%, #00f0ff 100%)", "name": "Aurora Linear" },
+        { "slug": "sunset-horizon", "gradient": "linear-gradient(180deg, #070b14 0%, #1a1235 40%, #7b2cbf 100%)", "name": "Sunset Horizon" }
+      ]
+    },
+    "typography": {
+      "fluid": true,
+      "defaultFontSizes": false,
+      "fontFamilies": [
+        { "fontFamily": "\"Space Grotesk\", sans-serif", "slug": "heading", "name": "Space Grotesk" },
+        { "fontFamily": "\"Inter\", sans-serif", "slug": "body", "name": "Inter" },
+        { "fontFamily": "\"JetBrains Mono\", monospace", "slug": "mono", "name": "JetBrains Mono" }
+      ],
+      "fontSizes": [
+        { "slug": "small", "size": "clamp(0.875rem, 0.875rem + ((1vw - 0.2rem) * 0.227), 1rem)", "name": "Small" },
+        { "slug": "medium", "size": "clamp(1rem, 1rem + ((1vw - 0.2rem) * 0.227), 1.125rem)", "name": "Medium" },
+        { "slug": "large", "size": "clamp(1.25rem, 1.25rem + ((1vw - 0.2rem) * 0.455), 1.5rem)", "name": "Large" },
+        { "slug": "x-large", "size": "clamp(1.5rem, 1.5rem + ((1vw - 0.2rem) * 0.909), 2rem)", "name": "X-Large" },
+        { "slug": "hero", "size": "clamp(2rem, 2rem + ((1vw - 0.2rem) * 3.636), 4rem)", "name": "Hero" }
+      ]
+    },
+    "spacing": {
+      "spacingSizes": [
+        { "size": "10px", "slug": "10", "name": "10px" },
+        { "size": "20px", "slug": "20", "name": "20px" },
+        { "size": "30px", "slug": "30", "name": "30px" },
+        { "size": "40px", "slug": "40", "name": "40px" },
+        { "size": "50px", "slug": "50", "name": "50px" },
+        { "size": "60px", "slug": "60", "name": "60px" },
+        { "size": "70px", "slug": "70", "name": "70px" },
+        { "size": "80px", "slug": "80", "name": "80px" }
+      ]
+    },
+    "shadow": {
+      "presets": [
+        { "slug": "cyan-glow", "shadow": "0 0 15px rgba(0, 240, 255, 0.5)", "name": "Cyan Glow" },
+        { "slug": "violet-glow", "shadow": "0 0 15px rgba(123, 44, 191, 0.5)", "name": "Violet Glow" }
+      ]
+    },
+    "custom": {
+      "glass": {
+        "background": "rgba(26, 18, 53, 0.6)",
+        "border": "1px solid rgba(255, 255, 255, 0.1)",
+        "blur": "10px"
+      }
+    },
+    "border": {
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "transparent",
+      "text": "var:preset|color|star-white"
+    },
+    "typography": {
+      "fontFamily": "var:preset|font-family|body",
+      "lineHeight": "1.65"
+    },
+    "spacing": {
+      "padding": {
+        "right": "1.5rem",
+        "left": "1.5rem"
+      }
+    },
+    "elements": {
+      "heading": {
+        "typography": {
+          "fontFamily": "var:preset|font-family|heading",
+          "fontWeight": "700"
+        },
+        "color": {
+          "text": "var:preset|color|star-white"
+        }
+      },
+      "link": {
+        "color": {
+          "text": "var:preset|color|starlight-cyan"
+        },
+        ":hover": {
+          "color": {
+            "text": "var:preset|color|solar-gold"
+          }
+        }
+      },
+      "button": {
+        "color": {
+          "background": "var:preset|color|cosmic-violet",
+          "text": "var:preset|color|star-white"
+        },
+        "border": {
+          "radius": "999px"
+        },
+        "spacing": {
+          "padding": {
+            "top": "0.75rem",
+            "right": "1.5rem",
+            "bottom": "0.75rem",
+            "left": "1.5rem"
+          }
+        },
+        ":hover": {
+          "color": {
+            "background": "var:preset|gradient|aurora-linear"
+          }
+        }
+      }
+    }
+  },
+  "templateParts": [
+    { "name": "header", "title": "Kozmik Başlık", "area": "header" },
+    { "name": "footer", "title": "Kozmik Altlık", "area": "footer" }
+  ],
+  "customTemplates": [
+    { "name": "page-solar-system", "title": "Güneş Sistemi", "postTypes": ["page"] },
+    { "name": "page-missions", "title": "Uzay Görevleri", "postTypes": ["page"] },
+    { "name": "page-black-holes", "title": "Karadelikler", "postTypes": ["page"] },
+    { "name": "page-supernovae", "title": "Süpernovalar ve Nebulalar", "postTypes": ["page"] },
+    { "name": "page-galaxies", "title": "Galaksiler", "postTypes": ["page"] },
+    { "name": "page-dark-matter", "title": "Karanlık Madde ve Enerji", "postTypes": ["page"] },
+    { "name": "page-apod", "title": "Günün Fotoğrafı ve NASA Bülteni", "postTypes": ["page"] },
+    { "name": "page-deneme-menu", "title": "Güneş Sistemi Menü Laboratuvarı", "postTypes": ["page"] }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "title": "Retro Uzay",
+  "settings": {
+    "color": {
+      "palette": [
+        { "slug": "space-black", "color": "#0a1208", "name": "Dark Green-Black" },
+        { "slug": "nebula-purple", "color": "#1a2e12", "name": "Dark Olive" },
+        { "slug": "cosmic-violet", "color": "#d97706", "name": "Amber" },
+        { "slug": "starlight-cyan", "color": "#4ade80", "name": "Terminal Green" },
+        { "slug": "solar-gold", "color": "#fbbf24", "name": "Warm Gold" },
+        { "slug": "star-white", "color": "#fef3c7", "name": "Warm Off-White" },
+        { "slug": "dust-gray", "color": "#78716c", "name": "Warm Gray" },
+        { "slug": "mars-red", "color": "#ea580c", "name": "Orange Red" },
+        { "slug": "aurora-green", "color": "#22c55e", "name": "Bright Green" }
+      ],
+      "gradients": [
+        { "slug": "galaxy-radial", "gradient": "radial-gradient(ellipse at 50% 30%, #1a2e12 0%, #0a1208 100%)", "name": "Olive Galaxy" },
+        { "slug": "aurora-linear", "gradient": "linear-gradient(135deg, #d97706 0%, #4ade80 100%)", "name": "Amber Green Aurora" },
+        { "slug": "sunset-horizon", "gradient": "linear-gradient(180deg, #0a1208 0%, #1a2e12 50%, #d97706 100%)", "name": "Amber Horizon" }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "var:preset|color|space-black",
+      "text": "var:preset|color|star-white"
+    }
+  }
+}

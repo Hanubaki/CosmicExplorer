@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "title": "Derin Uzay",
+  "settings": {
+    "color": {
+      "palette": [
+        { "slug": "space-black", "color": "#020208", "name": "Abyss Black" },
+        { "slug": "nebula-purple", "color": "#0d0a1a", "name": "Deep Nebula" },
+        { "slug": "cosmic-violet", "color": "#6b21a8", "name": "Royal Violet" },
+        { "slug": "starlight-cyan", "color": "#06b6d4", "name": "Deep Cyan" },
+        { "slug": "solar-gold", "color": "#f59e0b", "name": "Warm Gold" },
+        { "slug": "star-white", "color": "#e2e8f0", "name": "Pale Starlight" },
+        { "slug": "dust-gray", "color": "#64748b", "name": "Deep Dust" },
+        { "slug": "mars-red", "color": "#dc2626", "name": "Deep Mars" },
+        { "slug": "aurora-green", "color": "#16a34a", "name": "Deep Aurora" }
+      ],
+      "gradients": [
+        { "slug": "galaxy-radial", "gradient": "radial-gradient(ellipse at 50% 30%, #0d0a1a 0%, #020208 100%)", "name": "Deep Galaxy" },
+        { "slug": "aurora-linear", "gradient": "linear-gradient(135deg, #6b21a8 0%, #06b6d4 100%)", "name": "Deep Aurora" },
+        { "slug": "sunset-horizon", "gradient": "linear-gradient(180deg, #020208 0%, #0d0a1a 50%, #6b21a8 100%)", "name": "Deep Horizon" }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "var:preset|color|space-black",
+      "text": "var:preset|color|star-white"
+    }
+  }
+}

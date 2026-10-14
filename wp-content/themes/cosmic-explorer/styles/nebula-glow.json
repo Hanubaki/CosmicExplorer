@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "title": "Nebula Parıltısı",
+  "settings": {
+    "color": {
+      "palette": [
+        { "slug": "space-black", "color": "#0a0520", "name": "Deep Purple-Black" },
+        { "slug": "nebula-purple", "color": "#2d1b69", "name": "Rich Purple" },
+        { "slug": "cosmic-violet", "color": "#a855f7", "name": "Bright Violet" },
+        { "slug": "starlight-cyan", "color": "#22d3ee", "name": "Bright Cyan" },
+        { "slug": "solar-gold", "color": "#fbbf24", "name": "Bright Gold" },
+        { "slug": "star-white", "color": "#ffffff", "name": "Pure White" },
+        { "slug": "dust-gray", "color": "#a78bfa", "name": "Lavender Tinted" },
+        { "slug": "mars-red", "color": "#f43f5e", "name": "Rose Pink" },
+        { "slug": "aurora-green", "color": "#34d399", "name": "Emerald" }
+      ],
+      "gradients": [
+        { "slug": "galaxy-radial", "gradient": "radial-gradient(ellipse at 50% 30%, #2d1b69 0%, #0a0520 100%)", "name": "Vibrant Galaxy" },
+        { "slug": "aurora-linear", "gradient": "linear-gradient(135deg, #a855f7 0%, #22d3ee 100%)", "name": "Bright Aurora" },
+        { "slug": "sunset-horizon", "gradient": "linear-gradient(180deg, #0a0520 0%, #2d1b69 50%, #a855f7 100%)", "name": "Vibrant Horizon" }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "var:preset|color|space-black",
+      "text": "var:preset|color|star-white"
+    }
+  }
+}

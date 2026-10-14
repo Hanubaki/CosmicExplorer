@@ -1,0 +1,137 @@
+<!-- Fullscreen Hardware-Accelerated WebGL Deep Space & Volumetric Nebula Canvas -->
+<canvas id="cosmicWebglBg" class="cosmic-webgl-bg" aria-hidden="true"></canvas>
+
+<!-- wp:group {"tagName":"header","align":"full","className":"cosmic-header","style":{"color":{"background":"var:preset|color|nebula-purple"}},"layout":{"type":"constrained"},"position":{"type":"sticky"}} -->
+<header class="wp-block-group alignfull cosmic-header has-background">
+	<div class="cosmic-navbar-container">
+		<div class="cosmic-navbar-left">
+			<!-- Cosmic Solar System Navigation Menu Button (Solda) -->
+			<button class="cosmic-solar-menu-btn" id="solarMenuOpenBtn" aria-label="Güneş Sistemi Yörünge Simülatörünü Aç" title="Orbital Mekanik &amp; Gezegen Simülatörü">
+				<div class="solar-btn-orb">
+					<span class="solar-btn-sun-dot"></span>
+					<span class="solar-btn-orbit-ring"></span>
+					<span class="solar-btn-planet-dot"></span>
+				</div>
+				<span class="solar-btn-name">YÖRÜNGE SİMÜLATÖRÜ [3D]</span>
+			</button>
+
+			<div class="cosmic-brand-breadcrumb">
+				<!-- wp:site-title {"level":0,"style":{"elements":{"link":{"color":{"text":"var:preset|color|starlight-cyan"}}}},"fontFamily":"heading"} /-->
+			</div>
+		</div>
+		<div class="cosmic-navbar-right">
+			<span class="science-badge science-badge--cyan">TÜBİTAK UZAY &amp; NASA JPL VERİTABANI</span>
+		</div>
+	</div>
+</header>
+<!-- /wp:group -->
+
+<!-- Floating Solar Menu Quick Launcher (Her sayfada hızlı erişim butonu) -->
+<button class="solar-floating-launcher" id="solarFloatingLauncher" aria-label="Güneş Sistemi Yörünge Simülatörünü Aç" title="Orbital Simülasyonu Başlat">
+	<div class="solar-launcher-orb">
+		<span class="solar-btn-sun-dot"></span>
+		<span class="solar-btn-orbit-ring"></span>
+		<span class="solar-btn-planet-dot"></span>
+	</div>
+	<span class="solar-launcher-label">Yörünge Simülatörü</span>
+</button>
+
+<!-- Solar System Interactive Navigation Menu Overlay (Güneş Sistemi Navigasyon Portalı) -->
+<div class="solar-menu-overlay" id="solarMenuOverlay" aria-hidden="true">
+	<!-- Top Info & Controls Bar -->
+	<div class="solar-portal-topbar">
+		<div class="solar-portal-branding">
+			<div class="solar-portal-icon-wrap">
+				<span class="solar-portal-sun"></span>
+				<span class="solar-portal-ring"></span>
+			</div>
+			<div class="solar-portal-titles">
+				<div class="solar-portal-badge-row">
+					<span class="science-badge science-badge--gold">KEPLER YÖRÜNGE MEKANİĞİ</span>
+					<span class="solar-portal-live-tag">CANLI TELEMETRİ SİMÜLASYONU</span>
+				</div>
+				<h2 class="solar-portal-title">Güneş Sistemi Orbital Portalı</h2>
+			</div>
+		</div>
+
+		<!-- Filter Pills -->
+		<div class="solar-portal-filters" role="group" aria-label="Gökcismi Filtreleri">
+			<button class="solar-filter-btn is-active" data-filter="all">TÜMÜ</button>
+			<button class="solar-filter-btn" data-filter="planets">GEZEGENLER</button>
+			<button class="solar-filter-btn" data-filter="missions">GÖREVLER &amp; UYDULAR</button>
+			<button class="solar-filter-btn" data-filter="deepspace">DERİN UZAY</button>
+		</div>
+
+		<!-- Control Buttons & Close -->
+		<div class="solar-portal-controls">
+			<button class="solar-ctrl-btn" id="solarPlayPause" title="Yörünge Hareketini Duraklat / Başlat">
+				<span class="solar-ctrl-icon" id="solarPlayIcon">||</span>
+				<span class="solar-ctrl-text" id="solarPlayText">DURAKLAT</span>
+			</button>
+			<button class="solar-ctrl-btn" id="solarSpeedToggle" title="Yörünge Hızı">
+				<span class="solar-ctrl-icon">×</span>
+				<span class="solar-ctrl-text" id="solarSpeedText">1.0x</span>
+			</button>
+			<button class="solar-ctrl-btn" id="solarResetView" title="Görünümü Ortala">
+				<span class="solar-ctrl-icon">⊙</span>
+				<span class="solar-ctrl-text">ORTALA</span>
+			</button>
+			<button class="solar-portal-close-btn" id="solarMenuCloseBtn" title="Menüyü Kapat (ESC)" aria-label="Menüyü Kapat">
+				<span class="close-x">&times;</span>
+				<span class="close-esc-hint">ESC</span>
+			</button>
+		</div>
+	</div>
+
+	<!-- Main Solar Interactive Stage -->
+	<div class="solar-stage-container" id="solarStageContainer">
+		<!-- Canvas Layer -->
+		<canvas id="solarMenuCanvas" class="solar-menu-canvas" width="1400" height="850"></canvas>
+
+		<!-- Live Telemetry HUD (Bottom Left) -->
+		<div class="solar-hud-telemetry" id="solarHudTelemetry">
+			<div class="solar-tele-row">
+				<span class="solar-tele-label">SİSTEM:</span>
+				<span class="solar-tele-val">GÜNEŞ (SOL) - ORBİTAL TELEMETRİ</span>
+			</div>
+			<div class="solar-tele-row">
+				<span class="solar-tele-label">ODAK CİSİM:</span>
+				<span class="solar-tele-val" id="solarFocusName">DÜNYA • 149,6 M km (1.0 AU)</span>
+			</div>
+			<div class="solar-tele-row">
+				<span class="solar-tele-label">HIZ:</span>
+				<span class="solar-tele-val" id="solarSimSpeed">1.00 KEPLER BİRİMİ</span>
+			</div>
+		</div>
+
+		<!-- Interactive Floating Holographic Popout Card -->
+		<div class="solar-popout-card" id="solarPopoutCard" aria-hidden="true">
+			<div class="solar-popout-glow"></div>
+			<div class="solar-popout-header">
+				<span class="solar-popout-badge" id="solarPopoutBadge">GEZEGEN</span>
+				<span class="solar-popout-distance" id="solarPopoutDistance">ODAK: DÜNYA • 149,6 M km</span>
+			</div>
+			<div class="solar-popout-media">
+				<img id="solarPopoutImg" src="/wordpress/wp-content/themes/cosmic-explorer/assets/images/earth.jpg" alt="Önizleme" />
+				<div class="solar-popout-media-border"></div>
+			</div>
+			<div class="solar-popout-body">
+				<h3 class="solar-popout-title" id="solarPopoutTitle">Dünya</h3>
+				<span class="solar-popout-sub" id="solarPopoutSub">Mavi Gezegen &amp; Yaşam Beşiği</span>
+				<p class="solar-popout-desc" id="solarPopoutDesc">Detaylar...</p>
+			</div>
+			<div class="solar-popout-footer">
+				<a href="#" class="solar-popout-action" id="solarPopoutBtn">
+					<span id="solarPopoutBtnText">Bilimsel Veri Kartına Git</span>
+					<span class="solar-popout-arrow">→</span>
+				</a>
+			</div>
+		</div>
+
+		<!-- Bottom Hint -->
+		<div class="solar-canvas-hint" id="solarCanvasHint">
+			<span class="solar-hint-icon">⊙</span>
+			<span>İncelemek istediğiniz gökcismine, uzay sondasına veya derin uzay sektörüne tıklayın</span>
+		</div>
+	</div>
+</div>
