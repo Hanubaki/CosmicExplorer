@@ -1,0 +1,4528 @@
+/**
+ * Cosmic Explorer - Visual Effects Stylesheet
+ * 
+ * Provides comprehensive styling for the space theme, including starfields,
+ * glassmorphism, animations, and interactive components.
+ */
+
+/* ==========================================================================
+   0. Apple iOS & macOS WebKit Engine Compatibility
+   ========================================================================== */
+
+:root {
+	--sat: env(safe-area-inset-top, 0px);
+	--sar: env(safe-area-inset-right, 0px);
+	--sab: env(safe-area-inset-bottom, 0px);
+	--sal: env(safe-area-inset-left, 0px);
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+html, body {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+}
+
+/* Reset iOS button styling & eliminate grey tap highlight flashes */
+button, input, select, textarea, a, .milestone-node, .solar-floating-launcher, .cosmic-solar-menu-btn {
+	-webkit-tap-highlight-color: transparent;
+}
+
+button {
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+/* ==========================================================================
+   0. Fullscreen Hardware-Accelerated WebGL Deep Space & Volumetric Nebula Canvas
+   ========================================================================== */
+
+.cosmic-webgl-bg {
+	position: fixed;
+	inset: 0;
+	width: 100vw;
+	height: 100vh;
+	height: 100dvh;
+	z-index: -10;
+	pointer-events: none;
+	will-change: transform;
+}
+
+/* Stable Card Specular Light & Non-Distorting Hover */
+.gpu-tilt-enabled {
+	position: relative;
+	transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* ==========================================================================
+   1. Global WebGL Background Transparency Passthrough
+   Ensures the 60/120 FPS WebGL starfield & nebula is visible across the whole site
+   without opaque block backgrounds or canvases covering it.
+   ========================================================================== */
+
+html,
+body,
+.wp-site-blocks,
+main,
+main.wp-block-group,
+.wp-block-group.alignfull,
+.wp-block-group.alignfull.has-background,
+.wp-block-group.alignfull.has-space-black-background-color,
+.wp-block-group.alignfull.has-nebula-purple-background-color,
+.wp-block-post-content,
+.entry-content {
+	background-color: transparent !important;
+	background-image: none !important;
+}
+
+/* Hide legacy CSS starfield fallback so WebGL canvas is 100% visible */
+.cosmic-starfield {
+	display: none !important;
+}
+
+/* Soft fade-out for hero image cover so it dissolves into the WebGL universe */
+.wp-block-cover.alignfull {
+	-webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+	mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+}
+
+/* ==========================================================================
+   2. Shooting Stars
+   ========================================================================== */
+
+.shooting-star {
+	position: fixed;
+	width: 100px;
+	height: 2px;
+	background: linear-gradient(to right, transparent, var(--wp--preset--color--starlight-cyan));
+	pointer-events: none;
+	opacity: 0;
+	z-index: 0;
+	will-change: transform, opacity;
+}
+
+.shooting-star::before {
+	content: "";
+	position: absolute;
+	right: 0;
+	top: -1px;
+	width: 4px;
+	height: 4px;
+	background: var(--wp--preset--color--star-white);
+	border-radius: 50%;
+	box-shadow: 0 0 10px 2px var(--wp--preset--color--starlight-cyan);
+}
+
+.shooting-star-1 {
+	top: 10%;
+	left: -10%;
+	animation: cosmic-shooting-star 8s linear infinite;
+	animation-delay: 2s;
+}
+
+.shooting-star-2 {
+	top: 40%;
+	left: -20%;
+	width: 150px;
+	animation: cosmic-shooting-star 12s linear infinite;
+	animation-delay: 7s;
+}
+
+.shooting-star-3 {
+	top: 70%;
+	left: 110%;
+	background: linear-gradient(to left, transparent, var(--wp--preset--color--solar-gold));
+	transform: rotate(180deg);
+	animation: cosmic-shooting-star-reverse 10s linear infinite;
+	animation-delay: 4s;
+}
+
+.shooting-star-3::before {
+	box-shadow: 0 0 10px 2px var(--wp--preset--color--solar-gold);
+}
+
+@keyframes cosmic-shooting-star {
+	0% {
+		transform: translate3d(0, 0, 0) rotate(20deg);
+		opacity: 0;
+	}
+	10% {
+		opacity: 1;
+	}
+	20% {
+		transform: translate3d(120vw, 40vh, 0) rotate(20deg);
+		opacity: 0;
+	}
+	100% {
+		transform: translate3d(120vw, 40vh, 0) rotate(20deg);
+		opacity: 0;
+	}
+}
+
+@keyframes cosmic-shooting-star-reverse {
+	0% {
+		transform: translate3d(0, 0, 0) rotate(200deg);
+		opacity: 0;
+	}
+	10% {
+		opacity: 1;
+	}
+	20% {
+		transform: translate3d(-120vw, 40vh, 0) rotate(200deg);
+		opacity: 0;
+	}
+	100% {
+		transform: translate3d(-120vw, 40vh, 0) rotate(200deg);
+		opacity: 0;
+	}
+}
+
+
+/* ==========================================================================
+   3. Glassmorphism Cards
+   ========================================================================== */
+
+.cosmic-glass-card {
+	background: var(--wp--custom--glass--background, rgba(16, 12, 38, 0.6));
+	backdrop-filter: blur(var(--wp--custom--glass--blur, 10px));
+	-webkit-backdrop-filter: blur(var(--wp--custom--glass--blur, 10px));
+	border: 1px solid var(--wp--custom--glass--border, rgba(0, 240, 255, 0.2));
+	border-radius: 16px;
+	box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
+}
+
+.cosmic-glass-card:hover {
+	transform: translateY(-6px);
+	border-color: rgba(0, 240, 255, 0.5);
+	box-shadow: 0 12px 40px 0 rgba(0, 240, 255, 0.15);
+}
+
+.cosmic-glass-card--interactive {
+	cursor: pointer;
+}
+
+.cosmic-glass-card--interactive:active {
+	transform: translateY(-2px) scale(0.98);
+}
+
+/* Subtle inner glow for glass cards */
+.cosmic-glass-card::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 50%;
+	height: 100%;
+	background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.05), transparent);
+	transform: skewX(-20deg);
+	transition: all 0.5s ease;
+}
+
+.cosmic-glass-card:hover::before {
+	left: 150%;
+}
+
+
+/* ==========================================================================
+   4. Glow Text Effects
+   ========================================================================== */
+
+.glow-effect {
+	color: #ffffff;
+	text-shadow: 0 1px 15px rgba(0, 0, 0, 0.9), 0 0 10px rgba(56, 189, 248, 0.18);
+	letter-spacing: -0.015em;
+}
+
+.glow-effect--gold {
+	color: #ffffff;
+	text-shadow: 0 1px 15px rgba(0, 0, 0, 0.9), 0 0 10px rgba(245, 158, 11, 0.2);
+	letter-spacing: -0.015em;
+}
+
+.glow-effect--pulse {
+	animation: cosmic-glow-pulse 2s infinite alternate;
+}
+
+@keyframes cosmic-glow-pulse {
+	0% { opacity: 0.8; }
+	100% { opacity: 1; text-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 20px rgba(0, 240, 255, 0.5), 0 0 30px rgba(0, 240, 255, 0.3); }
+}
+
+
+/* ==========================================================================
+   5. Cosmic Header Styles
+   ========================================================================== */
+
+.cosmic-header {
+	background: rgba(30, 10, 60, 0.7);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+	position: relative;
+	z-index: 100;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	padding-top: env(safe-area-inset-top, 0px);
+	padding-left: env(safe-area-inset-left, 0px);
+	padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* Add a subtle glow line at the bottom */
+.cosmic-header::after {
+	content: "";
+	position: absolute;
+	bottom: -1px;
+	left: 0;
+	width: 100%;
+	height: 1px;
+	background: linear-gradient(90deg, transparent, var(--wp--preset--color--starlight-cyan), transparent);
+	opacity: 0.5;
+}
+
+
+/* ==========================================================================
+   6. Planet Card Specific Styles
+   ========================================================================== */
+
+.planet-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 2rem 1.5rem;
+	text-align: center;
+}
+
+.planet-card__photo-wrap {
+	width: 130px;
+	height: 130px;
+	border-radius: 50%;
+	overflow: hidden;
+	position: relative;
+	margin-bottom: 1.25rem;
+	border: 2px solid rgba(0, 240, 255, 0.4);
+	box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+	transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+	flex-shrink: 0;
+}
+
+.planet-card:hover .planet-card__photo-wrap {
+	transform: scale(1.08);
+	border-color: var(--wp--preset--color--starlight-cyan);
+	box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+}
+
+.planet-card__photo {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.science-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.22rem 0.65rem;
+	font-size: 0.70rem;
+	font-weight: 700;
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	border-radius: 4px;
+	background: rgba(2, 132, 199, 0.12);
+	border: 1px solid rgba(56, 189, 248, 0.35);
+	color: #38bdf8;
+	margin-bottom: 0.75rem;
+}
+
+.science-badge--gold {
+	background: rgba(245, 158, 11, 0.12);
+	border-color: rgba(245, 158, 11, 0.35);
+	color: #fbbf24;
+}
+
+.science-badge--cyan {
+	background: rgba(2, 132, 199, 0.15);
+	border-color: rgba(56, 189, 248, 0.4);
+	color: #7dd3fc;
+}
+
+.science-badge--purple {
+	background: rgba(30, 41, 59, 0.6);
+	border-color: rgba(148, 163, 184, 0.3);
+	color: #cbd5e1;
+}
+
+.science-data-table {
+	width: 100%;
+	text-align: left;
+	font-size: 0.82rem;
+	border-collapse: collapse;
+	margin-top: 0.75rem;
+}
+
+.science-data-table td {
+	padding: 0.35rem 0.15rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	color: var(--wp--preset--color--dust-gray);
+}
+
+.science-data-table td:last-child {
+	text-align: right;
+	font-family: var(--wp--preset--font-family--mono);
+	color: var(--wp--preset--color--star-white);
+}
+
+.timeline-photo {
+	width: 100%;
+	max-height: 200px;
+	object-fit: cover;
+	border-radius: 8px;
+	margin-top: 1rem;
+	border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.planet-preview-metrics {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0.75rem 0 1rem;
+	flex-wrap: wrap;
+	width: 100%;
+}
+
+.planet-preview-metric {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	padding: 0.25rem 0.6rem;
+	border-radius: 20px;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	font-size: 0.75rem;
+	color: #e2e8f0;
+	font-family: var(--wp--preset--font-family--mono, monospace);
+}
+
+.planet-preview-metric strong {
+	color: var(--wp--preset--color--starlight-cyan);
+}
+
+.planet-card__info {
+	max-height: 0;
+	opacity: 0;
+	overflow: hidden;
+	transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, margin-top 0.4s ease;
+	width: 100%;
+}
+
+.planet-card.is-expanded .planet-card__info,
+.planet-card__info.is-expanded {
+	max-height: 800px;
+	opacity: 1;
+	margin-top: 1rem;
+}
+
+.planet-toggle-btn {
+	cursor: pointer;
+	transition: all 0.3s ease;
+	font-size: 0.85rem !important;
+	padding: 0.5rem 1.2rem !important;
+}
+
+.planet-card.is-expanded .planet-toggle-btn {
+	background: rgba(0, 240, 255, 0.2) !important;
+	border-color: var(--wp--preset--color--starlight-cyan) !important;
+	color: #fff !important;
+}
+
+
+/* ==========================================================================
+   7. Quiz Styles
+   ========================================================================== */
+
+.space-quiz {
+	background: rgba(16, 12, 38, 0.5);
+	border-radius: 1rem;
+	padding: 2rem;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.quiz-option {
+	display: block;
+	width: 100%;
+	padding: 1rem;
+	margin-bottom: 1rem;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 8px;
+	color: var(--wp--preset--color--star-white);
+	font-size: 1.1rem;
+	text-align: left;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.quiz-option:hover:not(:disabled) {
+	background: rgba(0, 240, 255, 0.1);
+	border-color: rgba(0, 240, 255, 0.3);
+	transform: translateX(5px);
+}
+
+.quiz-option.is-correct {
+	background: rgba(0, 255, 136, 0.2);
+	border-color: var(--wp--preset--color--aurora-green);
+	box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+	animation: cosmic-quiz-correct 0.3s ease-out;
+}
+
+.quiz-option.is-wrong {
+	background: rgba(255, 51, 102, 0.2);
+	border-color: var(--wp--preset--color--mars-red);
+	box-shadow: 0 0 15px rgba(255, 51, 102, 0.3);
+	animation: cosmic-quiz-wrong 0.4s ease-in-out;
+}
+
+@keyframes cosmic-quiz-correct {
+	0% { transform: scale(1); }
+	50% { transform: scale(1.02); }
+	100% { transform: scale(1); }
+}
+
+@keyframes cosmic-quiz-wrong {
+	0%, 100% { transform: translateX(0); }
+	20%, 60% { transform: translateX(-5px); }
+	40%, 80% { transform: translateX(5px); }
+}
+
+.quiz-result {
+	text-align: center;
+	padding: 2rem;
+	background: var(--wp--preset--gradient--galaxy-radial);
+	border-radius: 12px;
+	margin-top: 2rem;
+	border: 1px solid rgba(0, 240, 255, 0.3);
+	box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+}
+
+.quiz-progress {
+	height: 8px;
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 4px;
+	margin-bottom: 2rem;
+	overflow: hidden;
+}
+
+.quiz-progress-bar {
+	height: 100%;
+	background: linear-gradient(90deg, var(--wp--preset--color--nebula-purple), var(--wp--preset--color--starlight-cyan));
+	transition: width 0.3s ease;
+}
+
+
+/* ==========================================================================
+   8. Timeline Styles
+   ========================================================================== */
+
+.mission-timeline {
+	max-width: 860px;
+	margin: 0 auto;
+	position: relative;
+	padding-left: 2.75rem;
+}
+
+.mission-timeline::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 12px;
+	width: 3px;
+	background: linear-gradient(180deg, var(--wp--preset--color--starlight-cyan), var(--wp--preset--color--cosmic-violet) 50%, var(--wp--preset--color--solar-gold) 100%);
+	border-radius: 2px;
+	box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+}
+
+.timeline-item {
+	position: relative;
+	margin-bottom: 2.75rem;
+	width: 100%;
+	display: block;
+}
+
+.timeline-item::before {
+	content: '';
+	position: absolute;
+	left: -2.75rem;
+	top: 24px;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: var(--wp--preset--color--space-black);
+	border: 3px solid var(--wp--preset--color--starlight-cyan);
+	box-shadow: 0 0 14px var(--wp--preset--color--starlight-cyan);
+	z-index: 2;
+}
+
+.timeline-content {
+	width: 100%;
+	text-align: left !important;
+	padding: 2rem;
+	border-radius: 12px;
+}
+
+.timeline-photo {
+	width: 100%;
+	max-height: 320px;
+	object-fit: cover;
+	border-radius: 8px;
+	margin: 1.25rem 0 0.5rem 0;
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+	display: block;
+}
+
+.timeline-year {
+	display: inline-block;
+	padding: 0.25rem 1rem;
+	background: rgba(0, 240, 255, 0.1);
+	border: 1px solid rgba(0, 240, 255, 0.3);
+	border-radius: 20px;
+	color: var(--wp--preset--color--starlight-cyan);
+	font-weight: bold;
+	margin-bottom: 0.5rem;
+}
+
+
+/* ==========================================================================
+   9. Stats Counter Styles
+   ========================================================================== */
+
+.stat-counter {
+	text-align: center;
+	padding: 2rem;
+	transition: all 0.3s ease;
+}
+
+.stat-counter__number {
+	font-family: monospace;
+	font-size: 3.5rem;
+	font-weight: bold;
+	color: var(--wp--preset--color--solar-gold);
+	margin-bottom: 0.5rem;
+	text-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+	display: block;
+}
+
+.stat-counter__label {
+	font-size: 1.1rem;
+	color: var(--wp--preset--color--star-white);
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	opacity: 0.8;
+}
+
+.stat-counter:hover {
+	transform: translateY(-5px);
+}
+
+.stat-counter:hover .stat-counter__number {
+	text-shadow: 0 0 25px rgba(255, 204, 0, 0.8);
+}
+
+
+/* ==========================================================================
+   10. Warp Speed Effect
+   ========================================================================== */
+
+.cosmic-starfield.warp-active::before,
+.cosmic-starfield.warp-active::after {
+	animation-duration: 2s; /* Drastically speed up */
+}
+
+.cosmic-starfield.warp-active::before {
+	transform: scaleY(5); /* Stretch stars into lines */
+	opacity: 0.8;
+	transition: transform 1s ease, opacity 1s ease;
+}
+
+.cosmic-starfield.warp-active::after {
+	transform: scaleY(8);
+	opacity: 1;
+	transition: transform 1s ease, opacity 1s ease;
+}
+
+
+/* ==========================================================================
+   11. Floating Animation
+   ========================================================================== */
+
+.cosmic-float {
+	animation: cosmic-float-anim 3s ease-in-out infinite;
+}
+
+@keyframes cosmic-float-anim {
+	0% { transform: translateY(0); }
+	50% { transform: translateY(-15px); }
+	100% { transform: translateY(0); }
+}
+
+
+/* ==========================================================================
+   12. Responsive Adjustments
+   ========================================================================== */
+
+@media (max-width: 768px) {
+	/* Reduce star complexity */
+	.cosmic-starfield::before,
+	.cosmic-starfield::after {
+		/* Halve the animation speed */
+		animation-duration: 200s;
+	}
+	
+	/* Simplified timeline */
+	.mission-timeline::before {
+		left: 20px;
+	}
+	
+	.timeline-dot {
+		left: 20px;
+	}
+	
+	.timeline-item {
+		justify-content: flex-end;
+	}
+	
+	.timeline-content {
+		width: calc(100% - 50px);
+		text-align: left !important;
+	}
+	
+	/* Adjust text shadows for performance */
+	.glow-effect,
+	.glow-effect--gold {
+		text-shadow: 0 0 10px currentColor;
+	}
+}
+
+
+/* ==========================================================================
+   13. Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+	
+	.cosmic-starfield {
+		/* Fallback static background */
+		background-image: var(--wp--preset--gradient--galaxy-radial);
+	}
+	
+	.cosmic-starfield::before,
+	.cosmic-starfield::after,
+	.shooting-star,
+	.cosmic-float {
+		display: none; /* Hide moving elements entirely */
+	}
+}
+
+
+/* ==========================================================================
+   14. Utility Classes
+   ========================================================================== */
+
+.min-h-screen {
+	min-height: 100vh;
+}
+
+.text-gradient {
+	background: linear-gradient(90deg, var(--wp--preset--color--starlight-cyan), var(--wp--preset--color--nebula-purple));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	color: transparent;
+	display: inline-block;
+}
+
+.cosmic-separator {
+	height: 2px;
+	width: 100%;
+	background: linear-gradient(90deg, transparent, var(--wp--preset--color--starlight-cyan), transparent);
+	border: none;
+	margin: 2rem 0;
+	opacity: 0.6;
+}
+
+
+/* ==========================================================================
+   15. Cosmic Sidebar Drawer & Dynamic Breadcrumb Navbar
+   ========================================================================== */
+
+.cosmic-navbar-container {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 0.75rem 1.5rem;
+	box-sizing: border-box;
+}
+
+.cosmic-navbar-left {
+	display: flex;
+	align-items: center;
+	gap: 1.25rem;
+}
+
+.cosmic-drawer-toggle {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	padding: 0.45rem 0.95rem;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(0, 240, 255, 0.35);
+	border-radius: 999px;
+	cursor: pointer;
+	transition: all 0.25s ease;
+	box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
+	flex-shrink: 0;
+}
+
+.cosmic-drawer-toggle:hover {
+	background: rgba(0, 240, 255, 0.15);
+	border-color: var(--wp--preset--color--starlight-cyan);
+	box-shadow: 0 0 20px rgba(0, 240, 255, 0.5), inset 0 0 10px rgba(0, 240, 255, 0.2);
+	transform: scale(1.04);
+}
+
+.cosmic-bh-mini-ring {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	border: 2px solid var(--wp--preset--color--starlight-cyan);
+	box-shadow: 0 0 8px var(--wp--preset--color--starlight-cyan), inset 0 0 5px var(--wp--preset--color--solar-gold);
+	background: #000;
+	animation: bh-mini-pulse 2.5s infinite alternate;
+}
+
+@keyframes bh-mini-pulse {
+	0% { box-shadow: 0 0 6px var(--wp--preset--color--starlight-cyan); transform: scale(0.95); }
+	100% { box-shadow: 0 0 12px var(--wp--preset--color--starlight-cyan), 0 0 20px rgba(255, 183, 3, 0.6); transform: scale(1.1); }
+}
+
+.cosmic-burger-label {
+	font-size: 0.88rem;
+	font-weight: 600;
+	color: var(--wp--preset--color--starlight-cyan);
+	letter-spacing: 0.04em;
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+}
+
+.cosmic-brand-breadcrumb {
+	display: inline-flex;
+	align-items: center;
+	vertical-align: middle;
+	line-height: 1;
+}
+
+.cosmic-brand-breadcrumb .wp-block-site-title {
+	margin: 0 !important;
+	padding: 0 !important;
+	font-size: 1.35rem !important;
+	font-weight: 800;
+	letter-spacing: -0.01em;
+	line-height: 1 !important;
+	display: inline-flex;
+	align-items: center;
+}
+
+.cosmic-brand-breadcrumb .wp-block-site-title a {
+	color: var(--wp--preset--color--starlight-cyan) !important;
+	text-decoration: none;
+	text-shadow: 0 0 12px rgba(0, 240, 255, 0.45);
+	line-height: 1 !important;
+	display: inline-flex;
+	align-items: center;
+	transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.cosmic-brand-breadcrumb .wp-block-site-title a:hover {
+	color: #ffffff !important;
+	text-shadow: 0 0 18px rgba(0, 240, 255, 0.8);
+}
+
+.cosmic-navbar-right {
+	display: flex;
+	align-items: center;
+}
+
+.cosmic-navbar-right .science-badge {
+	font-size: 0.75rem;
+	margin: 0;
+}
+
+/* ==========================================================================
+   16. Giant Black Hole Portal Overlay & Gravitational Orbital Arc
+   ========================================================================== */
+
+.cosmic-portal-overlay {
+	position: fixed;
+	inset: 0;
+	width: 100vw;
+	height: 100vh;
+	height: 100dvh;
+	/* Şeffaf ve hafif karartmalı arkaplan - Arkadaki web sitesi içeriği tamamen görünür! */
+	background: radial-gradient(circle at 110px 50%, rgba(10, 6, 25, 0.72) 0%, rgba(7, 11, 20, 0.42) 50%, rgba(7, 11, 20, 0.28) 100%);
+	/* Arka plan blur'u kaldırıldı (Sayfa kristal netliğinde görünür ve GPU kasma/lag sıfıra iner) */
+	z-index: 99999;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none !important;
+	transition: opacity 0.35s ease, visibility 0.35s ease;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+.cosmic-portal-overlay.is-open {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto !important;
+}
+
+/* Compact Top Info Bar - Zarif yarı saydam cam bant */
+.cosmic-portal-topbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.8rem 2.5rem 0.6rem;
+	z-index: 20;
+	position: relative;
+	background: linear-gradient(180deg, rgba(7, 11, 20, 0.82) 0%, rgba(7, 11, 20, 0.35) 100%);
+	border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+}
+
+.cosmic-portal-overlay.is-open .cosmic-portal-topbar {
+	animation: bh-topbar-slide 0.5s ease 0.35s backwards;
+}
+
+@keyframes bh-topbar-slide {
+	0% {
+		opacity: 0;
+		transform: translateY(-15px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.cosmic-portal-info {
+	display: flex;
+	align-items: center;
+}
+
+.bh-top-title-row {
+	display: flex;
+	align-items: center;
+	gap: 0.9rem;
+	flex-wrap: wrap;
+}
+
+.bh-top-title-row .science-badge {
+	margin: 0;
+	font-size: 0.72rem;
+	padding: 2px 8px;
+}
+
+.cosmic-portal-heading {
+	font-size: 1.25rem;
+	margin: 0;
+	color: var(--wp--preset--color--star-white);
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+	letter-spacing: -0.01em;
+	text-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+}
+
+.cosmic-portal-sub {
+	color: var(--wp--preset--color--dust-gray);
+	font-size: 0.82rem;
+	margin: 0;
+	font-family: var(--wp--preset--font-family--mono, monospace);
+}
+
+.cosmic-portal-close {
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	width: 38px;
+	height: 38px;
+	border-radius: 50%;
+	color: var(--wp--preset--color--star-white);
+	font-size: 1.4rem;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.cosmic-portal-close:hover {
+	background: rgba(239, 68, 68, 0.25);
+	border-color: var(--wp--preset--color--mars-red);
+	color: var(--wp--preset--color--mars-red);
+	transform: scale(1.1) rotate(90deg);
+}
+
+/* Portal Stage Area */
+.cosmic-portal-stage {
+	position: relative;
+	flex: 1;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+/* Giant Black Hole (Left Edge) - Borderless Natural Gravitational Field */
+.cosmic-blackhole {
+	position: absolute;
+	left: -280px;
+	top: 50%;
+	width: 820px;
+	height: 820px;
+	z-index: 5;
+	pointer-events: none;
+	transform-origin: 390px 50%;
+	transform: translateY(-50%) scale(1);
+	will-change: transform;
+}
+
+/* Birleşme koordinatından (X=110px, Y=50%) devasa karadeliğe 60/120 FPS pürüzsüz GPU ölçeklenmesi */
+.cosmic-portal-overlay.is-open .cosmic-blackhole {
+	animation: bh-portal-grow 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes bh-portal-grow {
+	0% {
+		transform: translateY(-50%) scale(0.12);
+		opacity: 0.95;
+	}
+	70% {
+		transform: translateY(-50%) scale(1.02);
+		opacity: 1;
+	}
+	100% {
+		transform: translateY(-50%) scale(1);
+		opacity: 1;
+	}
+}
+
+/* WebGL Hardware-Accelerated Portal Kerr Black Hole Canvas (Doğal Uzay Bükülmesi - Daire Kesiti Yok) */
+.cosmic-portal-gl-canvas {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 6;
+}
+
+/* Futuristic High-Visibility Orbit Navigation Dock in Topbar */
+.bh-orbit-dock {
+	display: flex;
+	align-items: center;
+	gap: 0.85rem;
+	background: rgba(14, 10, 32, 0.88);
+	border: 1.5px solid rgba(0, 240, 255, 0.5);
+	padding: 0.35rem 0.85rem;
+	border-radius: 999px;
+	box-shadow: 
+		0 8px 30px rgba(0, 0, 0, 0.7),
+		0 0 25px rgba(0, 240, 255, 0.28),
+		inset 0 0 15px rgba(123, 44, 191, 0.25);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+	pointer-events: auto;
+	z-index: 100;
+}
+
+.bh-dock-btn {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	background: rgba(0, 240, 255, 0.14);
+	border: 1.5px solid rgba(0, 240, 255, 0.65);
+	color: #00f0ff;
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+	font-size: 0.88rem;
+	font-weight: 700;
+	padding: 0.45rem 1.15rem;
+	border-radius: 999px;
+	cursor: pointer;
+	transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+	outline: none;
+	user-select: none;
+	pointer-events: auto;
+}
+
+.bh-dock-btn:hover {
+	background: #00f0ff;
+	color: #050813;
+	box-shadow: 0 0 22px rgba(0, 240, 255, 0.85);
+	transform: scale(1.05);
+}
+
+.bh-dock-btn:active {
+	transform: scale(0.95);
+}
+
+.bh-dock-arrow {
+	font-size: 0.8rem;
+}
+
+.bh-dock-indicator {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 0 0.8rem;
+	min-width: 95px;
+}
+
+.bh-dock-tag {
+	font-size: 0.6rem;
+	letter-spacing: 0.16em;
+	color: var(--wp--preset--color--solar-gold);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.bh-dock-counter {
+	font-size: 1.25rem;
+	font-weight: 800;
+	color: #ffffff;
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	letter-spacing: 0.05em;
+	text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+	margin-top: -0.1rem;
+}
+
+/* Minimalist Singularity Telemetry inside the Black Hole Void */
+.bh-singularity-telemetry {
+	position: absolute;
+	left: 470px; /* Optik olarak olay ufkunun görünür derin boşluk merkezine (X ≈ 190px) hizalama */
+	top: 50%;
+	transform: translate(-50%, -50%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.35rem;
+	pointer-events: none;
+	z-index: 20;
+	text-align: center;
+	white-space: nowrap;
+}
+
+.bh-sing-tag {
+	font-size: 0.65rem;
+	letter-spacing: 0.22em;
+	color: var(--wp--preset--color--solar-gold);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.bh-sing-id {
+	font-size: 1.55rem;
+	font-weight: 900;
+	color: #ffffff;
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+	letter-spacing: 0.04em;
+	text-shadow: 0 0 18px rgba(255, 183, 3, 0.85);
+	line-height: 1.1;
+}
+
+.bh-sing-sub {
+	font-size: 0.72rem;
+	color: rgba(248, 249, 250, 0.75);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	letter-spacing: 0.05em;
+}
+
+.bh-sing-badge {
+	display: inline-block;
+	margin-top: 0.15rem;
+	padding: 0.18rem 0.65rem;
+	border-radius: 999px;
+	border: 1px solid rgba(255, 183, 3, 0.45);
+	background: rgba(255, 183, 3, 0.12);
+	color: var(--wp--preset--color--solar-gold);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.62rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	box-shadow: 0 0 10px rgba(255, 183, 3, 0.2);
+}
+
+/* Orbital Topics Arc Container */
+.cosmic-orbit-arc {
+	position: absolute;
+	inset: 0;
+	pointer-events: none; /* Clicks pass through empty space to the HUD arrow buttons! */
+	z-index: 30;
+}
+
+/* Individual Orbiting Topic Node */
+.bh-orbit-node {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	gap: 1.25rem;
+	text-decoration: none;
+	z-index: 40;
+	cursor: pointer;
+	pointer-events: auto !important; /* CRITICAL: Enables clicks and hovers inside the pointer-events: none arc */
+	transform-origin: -150px 50%;
+	transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.bh-orbit-node * {
+	pointer-events: auto;
+}
+
+/* Arc Positioning (Tightly budgeted for all screen sizes) */
+.bh-orbit-node.pos-1 { top: 3%; left: clamp(320px, 31vw, 460px); }
+.bh-orbit-node.pos-2 { top: 26%; left: clamp(400px, 38vw, 560px); }
+.bh-orbit-node.pos-3 { top: 50%; left: clamp(400px, 38vw, 560px); }
+.bh-orbit-node.pos-4 { top: 73%; left: clamp(320px, 31vw, 460px); }
+
+/* Node Sphere */
+.bh-node-sphere {
+	position: relative;
+	width: 88px;
+	height: 88px;
+	border-radius: 50%;
+	flex-shrink: 0;
+	transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bh-node-photo-wrap {
+	position: absolute;
+	inset: 3px;
+	border-radius: 50%;
+	overflow: hidden;
+	background: #000;
+	border: 2px solid rgba(0, 240, 255, 0.45);
+	box-shadow: 0 0 16px rgba(0, 240, 255, 0.35);
+}
+
+.bh-node-photo {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.5s ease;
+}
+
+/* Outer Orbit Dashed Ring */
+.bh-node-ring {
+	position: absolute;
+	inset: -5px;
+	border-radius: 50%;
+	border: 1.5px dashed rgba(255, 183, 3, 0.55);
+	animation: bh-ring-rotate 16s linear infinite;
+}
+
+@keyframes bh-ring-rotate {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+.bh-node-badge {
+	position: absolute;
+	bottom: -7px;
+	left: 50%;
+	transform: translateX(-50%);
+	background: rgba(16, 12, 38, 0.95);
+	border: 1px solid var(--wp--preset--color--solar-gold);
+	color: var(--wp--preset--color--solar-gold);
+	font-size: 0.65rem;
+	font-weight: 700;
+	padding: 2px 7px;
+	border-radius: 10px;
+	white-space: nowrap;
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+	z-index: 5;
+}
+
+/* Node Meta Box */
+.bh-node-meta {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+	background: rgba(16, 12, 38, 0.85);
+	padding: 0.55rem 1.15rem;
+	border-radius: 12px;
+	border: 1px solid rgba(0, 240, 255, 0.25);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	transition: all 0.3s ease;
+	min-width: 185px;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.bh-node-title {
+	margin: 0;
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: var(--wp--preset--color--star-white);
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+	letter-spacing: -0.01em;
+	transition: color 0.2s ease;
+}
+
+.bh-node-sub {
+	margin: 0;
+	font-size: 0.84rem;
+	color: var(--wp--preset--color--dust-gray);
+	font-family: var(--wp--preset--font-family--body, sans-serif);
+}
+
+/* Node Hover State */
+.bh-orbit-node:hover {
+	transform: scale(1.08) translateX(15px);
+	z-index: 25;
+}
+
+.bh-orbit-node:hover .bh-node-sphere {
+	transform: scale(1.1);
+	box-shadow: 0 0 35px rgba(0, 240, 255, 0.85);
+}
+
+.bh-orbit-node:hover .bh-node-photo {
+	transform: scale(1.18);
+}
+
+.bh-orbit-node:hover .bh-node-meta {
+	border-color: var(--wp--preset--color--starlight-cyan);
+	background: rgba(30, 18, 65, 0.95);
+	box-shadow: 0 0 25px rgba(0, 240, 255, 0.35);
+	transform: translateX(5px);
+}
+
+.bh-orbit-node:hover .bh-node-title {
+	color: var(--wp--preset--color--starlight-cyan);
+	text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+}
+
+/* Node active highlight when its preview is shown in the right panel */
+.bh-orbit-node.is-preview-active {
+	transform: scale(1.06) translateX(10px);
+	z-index: 22;
+}
+
+.bh-orbit-node.is-preview-active .bh-node-sphere {
+	transform: scale(1.08);
+	box-shadow: 0 0 35px rgba(0, 240, 255, 0.95);
+}
+
+.bh-orbit-node.is-preview-active .bh-node-meta {
+	border-color: var(--wp--preset--color--starlight-cyan);
+	background: rgba(30, 18, 65, 0.95);
+	box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+}
+
+.bh-orbit-node.is-preview-active .bh-node-title {
+	color: var(--wp--preset--color--starlight-cyan);
+	text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+}
+
+/* ==========================================================================
+   Right Side Topic Preview & Summary Panel (Sağ Taraf Konu Özeti & Bilgi Paneli)
+   ========================================================================== */
+.cosmic-topic-preview-panel {
+	position: absolute;
+	right: clamp(1.5rem, 4vw, 3.5rem);
+	top: 50%;
+	transform: translateY(-50%);
+	width: clamp(300px, 26vw, 380px);
+	max-height: calc(100vh - 120px);
+	max-height: calc(100dvh - 120px);
+	background: rgba(14, 10, 32, 0.9);
+	border: 1px solid rgba(0, 240, 255, 0.35);
+	border-radius: 20px;
+	padding: 1.4rem 1.5rem;
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	box-shadow: 
+		0 14px 40px rgba(0, 0, 0, 0.75), 
+		0 0 30px rgba(0, 240, 255, 0.18),
+		inset 0 0 20px rgba(123, 44, 191, 0.15);
+	z-index: 25;
+	display: flex;
+	flex-direction: column;
+	gap: 0.9rem;
+	pointer-events: auto;
+	transition: border-color 0.3s ease, box-shadow 0.3s ease;
+	animation: bh-preview-panel-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.10s backwards;
+}
+
+@keyframes bh-preview-panel-in {
+	0% {
+		opacity: 0;
+		transform: translateY(-50%) translateX(40px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(-50%) translateX(0);
+	}
+}
+
+.cosmic-topic-preview-panel.bh-preview-flash {
+	animation: bh-preview-pulse 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes bh-preview-pulse {
+	0% {
+		transform: translateY(-50%) scale(0.98);
+		border-color: rgba(0, 240, 255, 0.8);
+		box-shadow: 0 14px 40px rgba(0, 0, 0, 0.75), 0 0 40px rgba(0, 240, 255, 0.4);
+	}
+	100% {
+		transform: translateY(-50%) scale(1);
+		border-color: rgba(0, 240, 255, 0.35);
+		box-shadow: 0 14px 40px rgba(0, 0, 0, 0.75), 0 0 30px rgba(0, 240, 255, 0.18);
+	}
+}
+
+.bh-preview-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.bh-preview-index {
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.78rem;
+	color: var(--wp--preset--color--starlight-cyan);
+	letter-spacing: 0.08em;
+	font-weight: 700;
+	background: rgba(0, 240, 255, 0.1);
+	border: 1px solid rgba(0, 240, 255, 0.25);
+	padding: 2px 8px;
+	border-radius: 6px;
+}
+
+.bh-preview-media {
+	position: relative;
+	width: 100%;
+	height: 155px;
+	border-radius: 12px;
+	overflow: hidden;
+	border: 1.5px solid rgba(0, 240, 255, 0.35);
+	background: #000;
+	box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8), 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.bh-preview-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.4s ease;
+}
+
+.bh-preview-media:hover .bh-preview-img {
+	transform: scale(1.06);
+}
+
+.bh-preview-media-border {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	border-radius: 12px;
+	box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.25);
+}
+
+.bh-preview-body {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+
+.bh-preview-title {
+	margin: 0;
+	font-size: 1.35rem;
+	font-weight: 800;
+	color: var(--wp--preset--color--star-white);
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+	letter-spacing: -0.01em;
+	line-height: 1.25;
+}
+
+.bh-preview-subtitle {
+	margin: 0;
+	font-size: 0.82rem;
+	color: var(--wp--preset--color--solar-gold);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	letter-spacing: 0.02em;
+}
+
+.bh-preview-excerpt {
+	margin: 0.3rem 0 0;
+	font-size: 0.88rem;
+	line-height: 1.6;
+	color: rgba(248, 249, 250, 0.85);
+	font-family: var(--wp--preset--font-family--body, sans-serif);
+}
+
+.bh-preview-footer {
+	margin-top: 0.4rem;
+}
+
+.bh-preview-cta-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.6rem;
+	width: 100%;
+	padding: 0.75rem 1.25rem;
+	border-radius: 999px;
+	background: linear-gradient(135deg, #7b2cbf 0%, #00f0ff 100%);
+	color: #ffffff;
+	font-weight: 700;
+	font-size: 0.92rem;
+	text-decoration: none;
+	box-shadow: 0 4px 18px rgba(0, 240, 255, 0.35);
+	transition: all 0.25s ease;
+	cursor: pointer;
+}
+
+.bh-preview-cta-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 25px rgba(0, 240, 255, 0.6), 0 0 15px rgba(123, 44, 191, 0.5);
+	color: #ffffff;
+}
+
+.bh-preview-arrow {
+	font-size: 1.1rem;
+	transition: transform 0.25s ease;
+}
+
+.bh-preview-cta-btn:hover .bh-preview-arrow {
+	transform: translateX(4px);
+}
+
+@media (max-width: 1100px) {
+	.cosmic-topic-preview-panel {
+		width: 285px;
+		right: 1.5rem;
+		padding: 1.1rem;
+	}
+	.bh-preview-media {
+		height: 125px;
+	}
+	.bh-preview-title {
+		font-size: 1.15rem;
+	}
+	.bh-preview-excerpt {
+		font-size: 0.82rem;
+	}
+}
+
+@media (max-width: 820px) {
+	.cosmic-topic-preview-panel {
+		display: none !important;
+	}
+}
+
+/* ==========================================================================
+   Gravitational Radial Bloom & Orbit Shockwave Animations (Kozmik Radyal Yayılım)
+   ========================================================================== */
+
+/* Base animation containers */
+.bh-orbit-node.emerge-out {
+	animation-duration: 0.40s;
+	animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+	animation-fill-mode: both;
+	transform-origin: center center;
+}
+
+.bh-orbit-node.swallow-in {
+	animation-duration: 0.38s;
+	animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+	animation-fill-mode: both;
+	transform-origin: center center;
+}
+
+/* Individual Radial Trajectories per Position (Karadelik merkezinden dışa kütleçekimsel fırlama) */
+.bh-orbit-node.pos-1.emerge-out { animation-name: bh-emerge-radial-pos1; }
+.bh-orbit-node.pos-2.emerge-out { animation-name: bh-emerge-radial-pos2; }
+.bh-orbit-node.pos-3.emerge-out { animation-name: bh-emerge-radial-pos3; }
+.bh-orbit-node.pos-4.emerge-out { animation-name: bh-emerge-radial-pos4; }
+
+.bh-orbit-node.pos-1.swallow-in { animation-name: bh-swallow-radial-pos1; }
+.bh-orbit-node.pos-2.swallow-in { animation-name: bh-swallow-radial-pos2; }
+.bh-orbit-node.pos-3.swallow-in { animation-name: bh-swallow-radial-pos3; }
+.bh-orbit-node.pos-4.swallow-in { animation-name: bh-swallow-radial-pos4; }
+
+/* --------------------------------------------------------------------------
+   Radial Emergence: Karadeliğin büyümesiyle birebir eşzamanlı olarak tekillikten
+   fırlayan, şok dalgasıyla yörüngesine ulaşıp elastik şekilde oturan konular
+   -------------------------------------------------------------------------- */
+
+/* Pos-1: Üst Açılı Radyal Fırlama */
+@keyframes bh-emerge-radial-pos1 {
+	0% {
+		/* Tam tekillik çekirdeği (X=110px, Y=50%) */
+		transform: translate(-270px, 420px) scale(0.18);
+		opacity: 0;
+		filter: brightness(2.6) drop-shadow(0 0 25px #00f0ff);
+	}
+	20% {
+		opacity: 1;
+		filter: brightness(1.8) drop-shadow(0 0 15px #00f0ff);
+	}
+	75% {
+		/* Kütleçekimsel yaylanma / elastik overshoot */
+		transform: translate(12px, -8px) scale(1.06);
+		filter: brightness(1.1);
+	}
+	100% {
+		/* Kusursuz yörünge dengesi */
+		transform: translate(0, 0) scale(1);
+		opacity: 1;
+		filter: brightness(1);
+	}
+}
+
+/* Pos-2: Orta-Üst Radyal Fırlama */
+@keyframes bh-emerge-radial-pos2 {
+	0% {
+		transform: translate(-350px, 220px) scale(0.18);
+		opacity: 0;
+		filter: brightness(2.6) drop-shadow(0 0 25px #00f0ff);
+	}
+	20% {
+		opacity: 1;
+		filter: brightness(1.8) drop-shadow(0 0 15px #00f0ff);
+	}
+	75% {
+		transform: translate(14px, -4px) scale(1.06);
+		filter: brightness(1.1);
+	}
+	100% {
+		transform: translate(0, 0) scale(1);
+		opacity: 1;
+		filter: brightness(1);
+	}
+}
+
+/* Pos-3: Tam Yatay Radyal Fırlama */
+@keyframes bh-emerge-radial-pos3 {
+	0% {
+		transform: translate(-350px, 0px) scale(0.18);
+		opacity: 0;
+		filter: brightness(2.6) drop-shadow(0 0 25px #00f0ff);
+	}
+	20% {
+		opacity: 1;
+		filter: brightness(1.8) drop-shadow(0 0 15px #00f0ff);
+	}
+	75% {
+		transform: translate(16px, 0px) scale(1.06);
+		filter: brightness(1.1);
+	}
+	100% {
+		transform: translate(0, 0) scale(1);
+		opacity: 1;
+		filter: brightness(1);
+	}
+}
+
+/* Pos-4: Alt Açılı Radyal Fırlama */
+@keyframes bh-emerge-radial-pos4 {
+	0% {
+		transform: translate(-270px, -210px) scale(0.18);
+		opacity: 0;
+		filter: brightness(2.6) drop-shadow(0 0 25px #00f0ff);
+	}
+	20% {
+		opacity: 1;
+		filter: brightness(1.8) drop-shadow(0 0 15px #00f0ff);
+	}
+	75% {
+		transform: translate(12px, 6px) scale(1.06);
+		filter: brightness(1.1);
+	}
+	100% {
+		transform: translate(0, 0) scale(1);
+		opacity: 1;
+		filter: brightness(1);
+	}
+}
+
+/* --------------------------------------------------------------------------
+   Gravitational Inward Swallow (Tekrar Sayfa Değiştirirken Karadeliğe Çekilme)
+   -------------------------------------------------------------------------- */
+
+@keyframes bh-swallow-radial-pos1 {
+	0% {
+		transform: translate(0, 0) scale(1);
+		opacity: 1;
+		filter: brightness(1);
+	}
+	100% {
+		transform: translate(-270px, 420px) scale(0.15);
+		opacity: 0;
+		filter: brightness(2.2);
+	}
+}
+
+@keyframes bh-swallow-radial-pos2 {
+	0% {
+		transform: translate(0, 0) scale(1);
+		opacity: 1;
+		filter: brightness(1);
+	}
+	100% {
+		transform: translate(-350px, 220px) scale(0.15);
+		opacity: 0;
+		filter: brightness(2.2);
+	}
+}
+
+@keyframes bh-swallow-radial-pos3 {
+	0% {
+		transform: translate(0, 0) scale(1);
+		opacity: 1;
+		filter: brightness(1);
+	}
+	100% {
+		transform: translate(-350px, 0px) scale(0.15);
+		opacity: 0;
+		filter: brightness(2.2);
+	}
+}
+
+@keyframes bh-swallow-radial-pos4 {
+	0% {
+		transform: translate(0, 0) scale(1);
+		opacity: 1;
+		filter: brightness(1);
+	}
+	100% {
+		transform: translate(-270px, -210px) scale(0.15);
+		opacity: 0;
+		filter: brightness(2.2);
+	}
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+	.cosmic-blackhole {
+		left: -220px;
+		width: 500px;
+		height: 500px;
+		transform-origin: 330px 50%;
+	}
+	.bh-singularity-telemetry {
+		display: none; /* Tablet ve mobilde dar ekranlarda taşmayı ve karmaşayı önler */
+	}
+	.cosmic-portal-overlay.is-open .cosmic-blackhole {
+		animation-name: bh-portal-grow-900;
+	}
+	.bh-node-sphere {
+		width: 80px;
+		height: 80px;
+	}
+	.bh-orbit-node.pos-1, .bh-orbit-node.pos-4 { left: 240px; }
+	.bh-orbit-node.pos-2, .bh-orbit-node.pos-3 { left: 290px; }
+	.bh-node-meta {
+		padding: 0.5rem 0.9rem;
+		min-width: 140px;
+	}
+	.bh-node-title {
+		font-size: 1.05rem;
+	}
+	.bh-node-sub {
+		font-size: 0.75rem;
+	}
+}
+
+@keyframes bh-portal-grow-900 {
+	0% {
+		transform: translateY(-50%) scale(0.16);
+		opacity: 0.95;
+	}
+	100% {
+		transform: translateY(-50%) scale(1);
+		opacity: 1;
+	}
+}
+
+@media (max-width: 600px) {
+	.cosmic-portal-topbar {
+		padding: 0.8rem 1rem;
+	}
+	.cosmic-portal-heading {
+		font-size: 1.15rem;
+	}
+	.cosmic-blackhole {
+		left: -240px;
+		width: 440px;
+		height: 440px;
+		transform-origin: 350px 50%;
+	}
+	.cosmic-portal-overlay.is-open .cosmic-blackhole {
+		animation-name: bh-portal-grow-600;
+	}
+	.bh-orbit-node.pos-1, .bh-orbit-node.pos-4 { left: 160px; }
+	.bh-orbit-node.pos-2, .bh-orbit-node.pos-3 { left: 190px; }
+	.bh-node-sphere {
+		width: 65px;
+		height: 65px;
+	}
+	.bh-node-meta {
+		min-width: 110px;
+	}
+	.bh-node-title {
+		font-size: 0.95rem;
+	}
+	.bh-node-sub {
+		display: none;
+	}
+}
+
+@keyframes bh-portal-grow-600 {
+	0% {
+		transform: translateY(-50%) scale(0.18);
+		opacity: 0.95;
+	}
+	100% {
+		transform: translateY(-50%) scale(1);
+		opacity: 1;
+	}
+}
+
+
+/* ==========================================================================
+   17. NASA APOD & 7-Day Interactive Archive Styles
+   ========================================================================== */
+
+.apod-archive-selector-wrap {
+	background: rgba(16, 12, 38, 0.65);
+	border: 1px solid rgba(0, 240, 255, 0.2);
+	border-radius: 16px;
+	padding: 1.25rem 1.5rem;
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.apod-selector-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.apod-selector-title {
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: var(--wp--preset--color--starlight-cyan);
+}
+
+.apod-selector-hint {
+	font-size: 0.8rem;
+	color: var(--wp--preset--color--dust-gray);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+}
+
+.apod-days-carousel {
+	display: flex;
+	gap: 0.85rem;
+	overflow-x: auto;
+	padding: 0.4rem 0.2rem 0.6rem;
+	scrollbar-width: thin;
+}
+
+.apod-days-carousel::-webkit-scrollbar {
+	height: 6px;
+}
+
+.apod-days-carousel::-webkit-scrollbar-thumb {
+	background: rgba(0, 240, 255, 0.3);
+	border-radius: 4px;
+}
+
+.apod-day-pill {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.25rem;
+	min-width: 130px;
+	padding: 0.8rem 1rem;
+	border-radius: 12px;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	cursor: pointer;
+	transition: all 0.25s ease;
+	flex-shrink: 0;
+	text-align: center;
+}
+
+.apod-day-pill .day-status {
+	font-size: 0.68rem;
+	font-weight: 800;
+	letter-spacing: 0.1em;
+	color: var(--wp--preset--color--starlight-cyan);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+}
+
+.apod-day-pill .day-date {
+	font-size: 0.92rem;
+	font-weight: 700;
+	color: var(--wp--preset--color--star-white);
+}
+
+.apod-day-pill .day-topic {
+	font-size: 0.75rem;
+	color: var(--wp--preset--color--dust-gray);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 115px;
+}
+
+.apod-day-pill:hover {
+	transform: translateY(-2px);
+	border-color: var(--wp--preset--color--starlight-cyan);
+	background: rgba(0, 240, 255, 0.08);
+	box-shadow: 0 4px 15px rgba(0, 240, 255, 0.2);
+}
+
+.apod-day-pill.is-active {
+	background: linear-gradient(135deg, rgba(123, 44, 191, 0.45) 0%, rgba(0, 240, 255, 0.25) 100%);
+	border-color: var(--wp--preset--color--solar-gold);
+	box-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
+	transform: translateY(-3px);
+}
+
+.apod-day-pill.is-active .day-status {
+	color: var(--wp--preset--color--solar-gold);
+}
+
+/* APOD Main Display Grid */
+.apod-main-display {
+	transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.apod-display-grid {
+	display: grid;
+	grid-template-columns: 1.15fr 1fr;
+	gap: 2.5rem;
+	align-items: start;
+}
+
+.apod-image-frame {
+	position: relative;
+	border-radius: 16px;
+	overflow: hidden;
+	border: 2px solid rgba(0, 240, 255, 0.35);
+	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 240, 255, 0.15);
+	aspect-ratio: 16 / 11;
+	background: #000;
+}
+
+.apod-featured-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.5s ease;
+	display: block;
+}
+
+.apod-image-frame:hover .apod-featured-img {
+	transform: scale(1.03);
+}
+
+.apod-image-overlay-tags {
+	position: absolute;
+	bottom: 14px;
+	left: 14px;
+	right: 14px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	z-index: 5;
+	pointer-events: none;
+}
+
+.apod-tag-badge {
+	background: rgba(7, 11, 20, 0.85);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	padding: 5px 12px;
+	border-radius: 8px;
+	font-size: 0.78rem;
+	font-weight: 700;
+	color: var(--wp--preset--color--starlight-cyan);
+	border: 1px solid rgba(0, 240, 255, 0.35);
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.apod-date-badge {
+	background: rgba(123, 44, 191, 0.85);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	padding: 5px 12px;
+	border-radius: 8px;
+	font-size: 0.78rem;
+	font-weight: 700;
+	color: var(--wp--preset--color--star-white);
+	border: 1px solid var(--wp--preset--color--solar-gold);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.apod-credit-bar {
+	display: flex;
+	gap: 0.6rem;
+	align-items: center;
+	margin-top: 0.85rem;
+	font-size: 0.82rem;
+	color: var(--wp--preset--color--dust-gray);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	flex-wrap: wrap;
+}
+
+.apod-credit-value {
+	color: var(--wp--preset--color--solar-gold);
+	font-weight: 600;
+}
+
+.apod-title {
+	font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+	margin: 0.6rem 0 1rem;
+	color: var(--wp--preset--color--star-white);
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+	line-height: 1.25;
+}
+
+.apod-desc-text {
+	font-size: 1.02rem;
+	line-height: 1.7;
+	color: rgba(248, 249, 250, 0.88);
+	margin-bottom: 1.5rem;
+}
+
+.apod-telemetry-table-wrap {
+	margin-top: 1.25rem;
+}
+
+@media (max-width: 992px) {
+	.apod-display-grid {
+		grid-template-columns: 1fr;
+		gap: 1.75rem;
+	}
+}
+
+/* ==========================================================================
+   18. Binary Black Hole System (WebGL Gravitational Lensing Portal)
+   ========================================================================== */
+
+.binary-bh-system {
+	position: fixed;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 140px;
+	height: 180px;
+	pointer-events: auto;
+	cursor: pointer;
+	z-index: 9990;
+	user-select: none;
+	outline: none;
+}
+
+
+/* WebGL Relativistic Binary Black Hole Canvas (GPU Gravitational Lensing) */
+.binary-bh-gl-canvas {
+	position: absolute;
+	left: -20px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 220px;
+	height: 220px;
+	pointer-events: none;
+	z-index: 9992;
+	transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+}
+
+.binary-bh-system:hover .binary-bh-gl-canvas {
+	filter: brightness(1.25) contrast(1.1);
+	transform: translateY(-50%) scale(1.05);
+}
+
+.binary-bh-system.is-merging .binary-bh-gl-canvas {
+	filter: brightness(1.6);
+}
+
+.cosmic-portal-overlay.is-open ~ .binary-bh-system,
+.binary-bh-system.is-hidden {
+	opacity: 0 !important;
+	pointer-events: none !important;
+}
+
+/* Unified System HUD Tooltip on Hover */
+.binary-bh-system-tooltip {
+	position: fixed;
+	left: 105px;
+	top: 50%;
+	transform: translateY(-50%) translateX(-12px);
+	background: rgba(8, 6, 12, 0.94);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	border-radius: 12px;
+	padding: 8px 16px;
+	white-space: nowrap;
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 200, 150, 0.15);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	z-index: 9999;
+}
+
+.binary-bh-system:hover .binary-bh-system-tooltip {
+	opacity: 1;
+	transform: translateY(-50%) translateX(0);
+}
+
+.binary-bh-system-tooltip::before {
+	content: '';
+	position: absolute;
+	left: -6px;
+	top: 50%;
+	transform: translateY(-50%) rotate(45deg);
+	width: 10px;
+	height: 10px;
+	background: rgba(8, 6, 12, 0.94);
+	border-left: 1px solid rgba(255, 255, 255, 0.3);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.bh-sys-tt-badge {
+	font-size: 0.68rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	color: #ffb703;
+	font-family: var(--wp--preset--font-family--mono, monospace);
+}
+
+.bh-sys-tt-title {
+	font-size: 0.95rem;
+	font-weight: 800;
+	color: var(--wp--preset--color--star-white);
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+	letter-spacing: -0.01em;
+}
+
+.bh-sys-tt-sub {
+	font-size: 0.74rem;
+	color: rgba(255, 255, 255, 0.75);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+}
+
+/* Mobile responsive scaling */
+@media (max-width: 768px) {
+	.binary-bh-arena {
+		width: 180px;
+		height: 180px;
+		margin-top: -90px;
+		transform-origin: 85px 90px;
+	}
+	.binary-bh-node {
+		width: 68px;
+		height: 68px;
+		left: -34px;
+	}
+	.binary-bh-node--upper {
+		top: 14px;
+	}
+	.binary-bh-node--lower {
+		top: 98px;
+	}
+	.binary-bh-bridge {
+		height: 38px;
+		top: calc(50% - 19px);
+		width: 20px;
+	}
+	.binary-bh-shockwave {
+		left: 85px;
+	}
+	.binary-bh-tooltip {
+		display: none;
+	}
+}
+
+/* ==========================================================================
+   19. Daily Cosmic Puzzle & Challenge Styles (Günün Kozmik Bulmacası)
+   ========================================================================== */
+
+.daily-puzzle-mount {
+	max-width: 920px;
+	margin: 0 auto;
+	width: 100%;
+}
+
+.cosmic-puzzle-shell {
+	background: rgba(14, 10, 32, 0.78);
+	border: 1.5px solid rgba(0, 240, 255, 0.28);
+	border-radius: 20px;
+	padding: 2.2rem 2.5rem;
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6), 0 0 35px rgba(0, 240, 255, 0.12);
+	position: relative;
+	overflow: hidden;
+}
+
+.cosmic-puzzle-shell::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	background: linear-gradient(90deg, transparent, var(--wp--preset--color--starlight-cyan), var(--wp--preset--color--solar-gold), transparent);
+}
+
+/* 1. Top Telemetry Bar */
+.puzzle-telemetry-bar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 1rem;
+	padding-bottom: 1.5rem;
+	margin-bottom: 1.75rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.puzzle-badge-group {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	flex-wrap: wrap;
+}
+
+.puzzle-date-tag {
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.85rem;
+	color: var(--wp--preset--color--solar-gold);
+	font-weight: 700;
+}
+
+.puzzle-stats-hud {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	flex-wrap: wrap;
+}
+
+.puzzle-stat-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	padding: 4px 12px;
+	border-radius: 20px;
+	font-size: 0.82rem;
+	color: var(--wp--preset--color--star-white);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+}
+
+.puzzle-stat-pill .stat-icon {
+	font-size: 0.95rem;
+}
+
+/* 2. Mission Header */
+.puzzle-mission-header {
+	margin-bottom: 1.75rem;
+}
+
+.puzzle-category-tag {
+	display: inline-block;
+	font-size: 0.72rem;
+	font-weight: 800;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--starlight-cyan);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	margin-bottom: 0.35rem;
+}
+
+.puzzle-mission-title {
+	font-size: 1.45rem;
+	margin: 0 0 0.5rem;
+	color: var(--wp--preset--color--star-white);
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+	line-height: 1.3;
+}
+
+.puzzle-mission-desc {
+	font-size: 0.95rem;
+	color: var(--wp--preset--color--dust-gray);
+	margin: 0;
+	line-height: 1.6;
+}
+
+/* 3. Progressive Clues */
+.puzzle-clues-wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	margin-bottom: 1.5rem;
+}
+
+.puzzle-clue-card {
+	border-radius: 12px;
+	padding: 1.15rem 1.4rem;
+	transition: all 0.3s ease;
+	position: relative;
+}
+
+.puzzle-clue-card.is-unlocked {
+	background: rgba(25, 16, 52, 0.7);
+	border: 1px solid rgba(0, 240, 255, 0.35);
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.puzzle-clue-card.is-locked {
+	background: rgba(255, 255, 255, 0.02);
+	border: 1px dashed rgba(255, 255, 255, 0.14);
+	opacity: 0.65;
+}
+
+.clue-card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.45rem;
+}
+
+.clue-number {
+	font-size: 0.75rem;
+	font-weight: 800;
+	letter-spacing: 0.1em;
+	color: var(--wp--preset--color--solar-gold);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+}
+
+.clue-status-tag {
+	font-size: 0.68rem;
+	font-weight: 700;
+	padding: 2px 7px;
+	border-radius: 6px;
+	background: rgba(255, 255, 255, 0.08);
+	color: var(--wp--preset--color--dust-gray);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+}
+
+.puzzle-clue-card.is-unlocked .clue-status-tag {
+	background: rgba(0, 240, 255, 0.18);
+	color: var(--wp--preset--color--starlight-cyan);
+}
+
+.clue-text {
+	margin: 0;
+	font-size: 1.02rem;
+	line-height: 1.6;
+	color: var(--wp--preset--color--star-white);
+}
+
+.puzzle-clue-card.is-locked .clue-text {
+	color: var(--wp--preset--color--dust-gray);
+	font-size: 0.88rem;
+	font-style: italic;
+}
+
+/* Unlock Next Clue Action */
+.puzzle-clue-action-wrap {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin-bottom: 1.75rem;
+	flex-wrap: wrap;
+}
+
+.puzzle-btn-reveal-clue {
+	background: linear-gradient(135deg, rgba(123, 44, 191, 0.6) 0%, rgba(0, 240, 255, 0.4) 100%);
+	border: 1px solid rgba(0, 240, 255, 0.5);
+	color: var(--wp--preset--color--star-white);
+	padding: 0.65rem 1.4rem;
+	border-radius: 10px;
+	font-size: 0.9rem;
+	font-weight: 700;
+	cursor: pointer;
+	transition: all 0.25s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+}
+
+.puzzle-btn-reveal-clue:hover {
+	background: linear-gradient(135deg, rgba(123, 44, 191, 0.85) 0%, rgba(0, 240, 255, 0.65) 100%);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 18px rgba(0, 240, 255, 0.35);
+}
+
+.clue-penalty-note {
+	font-size: 0.8rem;
+	color: var(--wp--preset--color--dust-gray);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+}
+
+/* 4. Guess Options Grid */
+.puzzle-guess-section {
+	margin-top: 1.5rem;
+}
+
+.puzzle-guess-title {
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: var(--wp--preset--color--starlight-cyan);
+	margin: 0 0 1rem;
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+}
+
+.puzzle-options-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.9rem;
+}
+
+.puzzle-option-btn,
+.puzzle-bonus-btn {
+	background: rgba(255, 255, 255, 0.04);
+	border: 1.5px solid rgba(255, 255, 255, 0.12);
+	border-radius: 12px;
+	padding: 0.95rem 1.25rem;
+	color: var(--wp--preset--color--star-white);
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.25s ease;
+	display: flex;
+	align-items: center;
+	gap: 0.85rem;
+	text-align: left;
+	width: 100%;
+}
+
+.opt-key {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.08);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	color: var(--wp--preset--color--starlight-cyan);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.82rem;
+	font-weight: 800;
+	flex-shrink: 0;
+	transition: all 0.2s ease;
+}
+
+.puzzle-option-btn:hover:not(:disabled),
+.puzzle-bonus-btn:hover:not(:disabled) {
+	background: rgba(0, 240, 255, 0.08);
+	border-color: var(--wp--preset--color--starlight-cyan);
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 240, 255, 0.25);
+}
+
+.puzzle-option-btn:hover:not(:disabled) .opt-key,
+.puzzle-bonus-btn:hover:not(:disabled) .opt-key {
+	background: var(--wp--preset--color--starlight-cyan);
+	color: #000;
+}
+
+.puzzle-option-btn.is-correct,
+.puzzle-bonus-btn.is-correct {
+	background: rgba(34, 197, 94, 0.2) !important;
+	border-color: #22c55e !important;
+	box-shadow: 0 0 25px rgba(34, 197, 94, 0.45) !important;
+	transform: scale(1.02);
+}
+
+.puzzle-option-btn.is-correct .opt-key,
+.puzzle-bonus-btn.is-correct .opt-key {
+	background: #22c55e !important;
+	color: #000 !important;
+}
+
+.puzzle-option-btn.is-wrong,
+.puzzle-bonus-btn.is-wrong {
+	background: rgba(239, 68, 68, 0.2) !important;
+	border-color: #ef4444 !important;
+	box-shadow: 0 0 25px rgba(239, 68, 68, 0.4) !important;
+	animation: cosmic-quiz-wrong 0.35s ease-in-out;
+}
+
+.puzzle-option-btn:disabled,
+.puzzle-bonus-btn:disabled {
+	cursor: default;
+}
+
+/* 5. Reveal & Science Fact Box */
+.puzzle-reveal-box {
+	margin-top: 1.5rem;
+	padding: 1.4rem 1.6rem;
+	border-radius: 14px;
+	border: 1px solid rgba(0, 240, 255, 0.35);
+	animation: bh-emerge-fade 0.4s ease-out;
+}
+
+.puzzle-reveal-box.is-success {
+	background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(14, 10, 32, 0.8) 100%);
+	border-color: #22c55e;
+}
+
+.puzzle-reveal-box.is-fail {
+	background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(14, 10, 32, 0.8) 100%);
+	border-color: #ef4444;
+}
+
+.reveal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.65rem;
+}
+
+.reveal-status-icon {
+	font-weight: 800;
+	font-size: 0.95rem;
+	color: var(--wp--preset--color--star-white);
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+}
+
+.reveal-xp-pill {
+	background: var(--wp--preset--color--solar-gold);
+	color: #000;
+	font-weight: 800;
+	font-size: 0.8rem;
+	padding: 3px 10px;
+	border-radius: 12px;
+	font-family: var(--wp--preset--font-family--mono, monospace);
+}
+
+.reveal-fact {
+	margin: 0;
+	font-size: 0.96rem;
+	line-height: 1.65;
+	color: rgba(248, 249, 250, 0.9);
+}
+
+/* 6. Bonus Stage */
+.puzzle-bonus-stage {
+	margin-top: 2rem;
+	padding-top: 1.75rem;
+	border-top: 1px dashed rgba(255, 255, 255, 0.15);
+	animation: bh-emerge-fade 0.4s ease-out;
+}
+
+.puzzle-bonus-fact-box {
+	margin-top: 1.25rem;
+	padding: 1.25rem 1.4rem;
+	background: rgba(255, 183, 3, 0.08);
+	border: 1px solid rgba(255, 183, 3, 0.35);
+	border-radius: 12px;
+	color: var(--wp--preset--color--star-white);
+	font-size: 0.92rem;
+	line-height: 1.6;
+}
+
+.puzzle-btn-finish {
+	margin-top: 1.25rem;
+	background: linear-gradient(135deg, var(--wp--preset--color--solar-gold) 0%, #ff8800 100%);
+	color: #000;
+	font-weight: 800;
+	font-size: 1.05rem;
+	padding: 0.9rem 2rem;
+	border-radius: 12px;
+	border: none;
+	cursor: pointer;
+	width: 100%;
+	transition: all 0.25s ease;
+	box-shadow: 0 4px 20px rgba(255, 183, 3, 0.35);
+}
+
+.puzzle-btn-finish:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 28px rgba(255, 183, 3, 0.55);
+}
+
+/* 7. Completed Screen */
+.puzzle-completed-screen {
+	text-align: center;
+	padding: 1rem 0;
+	animation: bh-emerge-fade 0.5s ease-out;
+}
+
+.completed-hero-icon {
+	font-size: 3.5rem;
+	margin-bottom: 0.5rem;
+	display: inline-block;
+	animation: cosmic-float 3s ease-in-out infinite;
+}
+
+.completed-heading {
+	font-size: 1.85rem;
+	margin: 0 0 0.5rem;
+	color: var(--wp--preset--color--star-white);
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+}
+
+.completed-sub {
+	font-size: 1.02rem;
+	color: var(--wp--preset--color--dust-gray);
+	max-width: 580px;
+	margin: 0 auto 2rem;
+	line-height: 1.6;
+}
+
+.completed-stats-row {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1.25rem;
+	max-width: 620px;
+	margin: 0 auto 2rem;
+}
+
+.completed-stat-card {
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(0, 240, 255, 0.25);
+	border-radius: 14px;
+	padding: 1.25rem 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.completed-stat-card .card-val {
+	font-size: 1.4rem;
+	font-weight: 800;
+	color: var(--wp--preset--color--solar-gold);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+}
+
+.completed-stat-card .card-lbl {
+	font-size: 0.78rem;
+	color: var(--wp--preset--color--dust-gray);
+	font-weight: 600;
+}
+
+/* Countdown Timer */
+.puzzle-countdown-card {
+	background: linear-gradient(135deg, rgba(16, 12, 38, 0.95) 0%, rgba(7, 11, 20, 0.95) 100%);
+	border: 1.5px solid rgba(0, 240, 255, 0.35);
+	border-radius: 16px;
+	padding: 1.5rem 2rem;
+	max-width: 520px;
+	margin: 0 auto 2rem;
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 240, 255, 0.08);
+}
+
+.countdown-title {
+	display: block;
+	font-size: 0.75rem;
+	letter-spacing: 0.15em;
+	color: var(--wp--preset--color--starlight-cyan);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-weight: 800;
+	margin-bottom: 0.65rem;
+}
+
+.countdown-timer-display {
+	font-size: 2.2rem;
+	font-weight: 800;
+	color: var(--wp--preset--color--solar-gold);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	letter-spacing: 0.05em;
+	text-shadow: 0 0 20px rgba(255, 183, 3, 0.6);
+	margin-bottom: 0.4rem;
+}
+
+.countdown-hint {
+	font-size: 0.8rem;
+	color: var(--wp--preset--color--dust-gray);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+}
+
+/* 1-Click Share */
+.puzzle-share-actions {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+	margin-bottom: 1.5rem;
+}
+
+.puzzle-btn-share {
+	background: linear-gradient(135deg, var(--wp--preset--color--cosmic-violet) 0%, var(--wp--preset--color--starlight-cyan) 100%);
+	color: var(--wp--preset--color--star-white);
+	border: none;
+	padding: 0.9rem 2rem;
+	border-radius: 30px;
+	font-weight: 700;
+	font-size: 0.95rem;
+	cursor: pointer;
+	transition: all 0.25s ease;
+	box-shadow: 0 6px 24px rgba(0, 240, 255, 0.35);
+}
+
+.puzzle-btn-share:hover {
+	transform: translateY(-2px) scale(1.02);
+	box-shadow: 0 8px 32px rgba(0, 240, 255, 0.55);
+}
+
+.share-toast {
+	font-size: 0.84rem;
+	color: var(--wp--preset--color--solar-gold);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-weight: 700;
+	min-height: 20px;
+	opacity: 0;
+	transition: opacity 0.25s ease;
+}
+
+.share-toast.is-visible {
+	opacity: 1;
+}
+
+.puzzle-reinspect-wrap {
+	margin-top: 1rem;
+}
+
+.puzzle-btn-reinspect {
+	background: transparent;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	color: var(--wp--preset--color--dust-gray);
+	padding: 6px 16px;
+	border-radius: 8px;
+	font-size: 0.82rem;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.puzzle-btn-reinspect:hover {
+	border-color: var(--wp--preset--color--starlight-cyan);
+	color: var(--wp--preset--color--starlight-cyan);
+}
+
+@keyframes bh-emerge-fade {
+	0% { opacity: 0; transform: translateY(12px); }
+	100% { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+	.cosmic-puzzle-shell {
+		padding: 1.5rem 1.25rem;
+	}
+	.puzzle-options-grid {
+		grid-template-columns: 1fr;
+	}
+	.completed-stats-row {
+		grid-template-columns: 1fr;
+		gap: 0.75rem;
+	}
+	.countdown-timer-display {
+		font-size: 1.7rem;
+	}
+}
+
+/* ==========================================================================
+   Güneş Sistemi Navigasyon Menüsü Laboratuvarı (Solar Menu Lab Styles)
+   ========================================================================== */
+
+.solar-lab-wrapper {
+	position: relative;
+	min-height: 100vh;
+}
+
+.solar-lab-header {
+	margin-bottom: 2rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+}
+
+.solar-lab-nav-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.solar-back-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.45rem 1rem;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	color: var(--wp--preset--color--star-white);
+	text-decoration: none;
+	font-size: 0.88rem;
+	font-weight: 600;
+	transition: all 0.2s ease;
+}
+
+.solar-back-link:hover {
+	background: rgba(0, 240, 255, 0.15);
+	border-color: var(--wp--preset--color--starlight-cyan);
+	color: var(--wp--preset--color--starlight-cyan);
+	transform: translateX(-3px);
+}
+
+.solar-lab-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.35rem 0.85rem;
+	border-radius: 999px;
+	background: rgba(255, 183, 3, 0.12);
+	border: 1px solid rgba(255, 183, 3, 0.35);
+	color: var(--wp--preset--color--solar-gold);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+.solar-badge-dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--wp--preset--color--solar-gold);
+	box-shadow: 0 0 8px var(--wp--preset--color--solar-gold);
+	animation: cosmic-pulse-dot 1.8s infinite ease-in-out;
+}
+
+@keyframes cosmic-pulse-dot {
+	0%, 100% { opacity: 1; transform: scale(1); }
+	50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.solar-lab-title {
+	font-size: clamp(2rem, 3.8vw, 3.2rem);
+	font-weight: 900;
+	color: #ffffff;
+	margin: 0 0 0.5rem;
+	line-height: 1.15;
+}
+
+.solar-lab-desc {
+	font-size: 1.05rem;
+	color: rgba(248, 249, 250, 0.82);
+	max-width: 950px;
+	line-height: 1.65;
+	margin: 0;
+}
+
+/* Toolbar Dock (Filters & Controls) */
+.solar-toolbar-dock {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 1rem;
+	padding: 0.85rem 1.25rem;
+	border-radius: 16px;
+	background: rgba(14, 10, 32, 0.85);
+	border: 1px solid rgba(0, 240, 255, 0.3);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(123, 44, 191, 0.15);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+}
+
+.solar-filter-group {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.solar-filter-btn {
+	padding: 0.45rem 0.95rem;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	color: var(--wp--preset--color--star-white);
+	font-size: 0.82rem;
+	font-weight: 600;
+	cursor: pointer;
+	touch-action: manipulation;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.22s ease;
+}
+
+.solar-filter-btn:active {
+	transform: scale(0.96);
+}
+
+.solar-filter-btn:hover {
+	border-color: rgba(0, 240, 255, 0.5);
+	color: var(--wp--preset--color--starlight-cyan);
+}
+
+.solar-filter-btn.is-active {
+	background: linear-gradient(135deg, rgba(123, 44, 191, 0.75), rgba(0, 240, 255, 0.75));
+	border-color: var(--wp--preset--color--starlight-cyan);
+	color: #ffffff;
+	box-shadow: 0 0 14px rgba(0, 240, 255, 0.4);
+}
+
+.solar-sim-controls {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.solar-ctrl-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.45rem 0.85rem;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	color: var(--wp--preset--color--star-white);
+	font-size: 0.82rem;
+	font-weight: 600;
+	cursor: pointer;
+	touch-action: manipulation;
+	transition: all 0.2s ease;
+}
+
+.solar-ctrl-btn:active {
+	transform: scale(0.96);
+}
+
+.solar-ctrl-btn:hover {
+	background: rgba(255, 255, 255, 0.12);
+	border-color: rgba(0, 240, 255, 0.4);
+	color: var(--wp--preset--color--starlight-cyan);
+}
+
+.solar-ctrl-btn--portal {
+	background: linear-gradient(135deg, rgba(255, 183, 3, 0.25), rgba(123, 44, 191, 0.4));
+	border-color: var(--wp--preset--color--solar-gold);
+	color: var(--wp--preset--color--solar-gold);
+	box-shadow: 0 0 14px rgba(255, 183, 3, 0.25);
+}
+
+.solar-ctrl-btn--portal:hover {
+	background: linear-gradient(135deg, rgba(255, 183, 3, 0.4), rgba(123, 44, 191, 0.6));
+	color: #ffffff;
+	box-shadow: 0 0 20px rgba(255, 183, 3, 0.5);
+}
+
+/* ==========================================================================
+   Güneş Sistemi Kozmik Menü Butonu (Futuristic Solar Navbar Button)
+   ========================================================================== */
+
+.cosmic-solar-menu-btn {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.4rem 1.15rem 0.4rem 0.65rem;
+	border-radius: 999px;
+	background: linear-gradient(135deg, rgba(26, 18, 53, 0.92) 0%, rgba(14, 10, 32, 0.95) 100%);
+	border: 1.5px solid rgba(0, 240, 255, 0.55);
+	color: #ffffff;
+	cursor: pointer;
+	box-shadow: 
+		0 4px 18px rgba(0, 0, 0, 0.6),
+		0 0 20px rgba(0, 240, 255, 0.22),
+		inset 0 0 12px rgba(123, 44, 191, 0.3);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	user-select: none;
+	outline: none;
+	z-index: 50;
+}
+
+.cosmic-solar-menu-btn:hover {
+	border-color: #00f0ff;
+	background: linear-gradient(135deg, rgba(35, 22, 75, 0.96) 0%, rgba(18, 12, 42, 0.98) 100%);
+	box-shadow: 
+		0 8px 28px rgba(0, 0, 0, 0.75),
+		0 0 30px rgba(0, 240, 255, 0.5),
+		inset 0 0 16px rgba(0, 240, 255, 0.25);
+	transform: translateY(-2px) scale(1.03);
+}
+
+.cosmic-solar-menu-btn:active {
+	transform: translateY(0) scale(0.97);
+}
+
+/* Animated Mini Solar System Orb inside Button */
+.solar-btn-orb {
+	position: relative;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: radial-gradient(circle, rgba(255, 183, 3, 0.2) 0%, rgba(123, 44, 191, 0.3) 70%, transparent 100%);
+	border: 1px solid rgba(255, 183, 3, 0.4);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	box-shadow: 0 0 12px rgba(255, 183, 3, 0.35);
+}
+
+.solar-btn-sun-dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: radial-gradient(circle, #ffffff 10%, #ffb703 60%, #ff5722 100%);
+	box-shadow: 0 0 10px #ffb703, 0 0 16px rgba(255, 87, 34, 0.8);
+	animation: solar-sun-pulse 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes solar-sun-pulse {
+	0% { transform: scale(0.9); box-shadow: 0 0 8px #ffb703; }
+	100% { transform: scale(1.15); box-shadow: 0 0 14px #ffb703, 0 0 20px rgba(255, 87, 34, 0.9); }
+}
+
+.solar-btn-orbit-ring {
+	position: absolute;
+	inset: 2px;
+	border-radius: 50%;
+	border: 1.2px dashed rgba(0, 240, 255, 0.65);
+	animation: solar-btn-spin 6s linear infinite;
+	pointer-events: none;
+}
+
+@keyframes solar-btn-spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+.solar-btn-planet-dot {
+	position: absolute;
+	top: -2px;
+	left: 50%;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: #00f0ff;
+	box-shadow: 0 0 8px #00f0ff;
+	transform: translateX(-50%);
+	animation: solar-btn-spin 4s linear infinite;
+	transform-origin: 50% 18px;
+}
+
+.solar-btn-text-wrap {
+	display: inline-flex;
+	align-items: center;
+	white-space: nowrap;
+	line-height: 1;
+}
+
+.solar-btn-tag {
+	display: none;
+}
+
+.solar-btn-name {
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+	font-size: 0.9rem;
+	font-weight: 800;
+	color: #ffffff;
+	letter-spacing: 0.02em;
+	white-space: nowrap;
+	line-height: 1;
+	text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+/* Floating Solar Launcher Button (Solda) */
+.solar-floating-launcher {
+	position: fixed;
+	bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+	left: calc(20px + env(safe-area-inset-left, 0px));
+	right: auto;
+	display: flex;
+	align-items: center;
+	gap: 0.65rem;
+	padding: 0.55rem 1.15rem 0.55rem 0.75rem;
+	-webkit-tap-highlight-color: transparent;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	user-select: none;
+	border-radius: 999px;
+	background: rgba(14, 10, 32, 0.94);
+	border: 2px solid rgba(0, 240, 255, 0.65);
+	color: #ffffff;
+	cursor: pointer;
+	box-shadow: 
+		0 8px 30px rgba(0, 0, 0, 0.85),
+		0 0 25px rgba(0, 240, 255, 0.4),
+		inset 0 0 15px rgba(123, 44, 191, 0.3);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+	z-index: 9999;
+	transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	outline: none;
+	animation: solar-launcher-float 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes solar-launcher-float {
+	0% { transform: translateY(0); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 240, 255, 0.3); }
+	100% { transform: translateY(-5px); box-shadow: 0 14px 40px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 240, 255, 0.55); }
+}
+
+.solar-floating-launcher:hover {
+	transform: translateY(-8px) scale(1.05);
+	border-color: #00f0ff;
+	background: rgba(22, 14, 50, 0.98);
+	box-shadow: 0 16px 45px rgba(0, 0, 0, 0.95), 0 0 45px rgba(0, 240, 255, 0.7);
+}
+
+.solar-launcher-orb {
+	position: relative;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.solar-launcher-label {
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+	font-size: 0.82rem;
+	font-weight: 800;
+	letter-spacing: 0.04em;
+	color: #ffffff;
+	text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+}
+
+/* ==========================================================================
+   Güneş Sistemi Navigasyon Portalı (Solar System Interactive Menu Overlay)
+   ========================================================================== */
+
+.solar-menu-overlay {
+	position: fixed;
+	inset: 0;
+	width: 100vw;
+	height: 100vh;
+	height: 100dvh;
+	z-index: 999999;
+	background: radial-gradient(circle at 50% 50%, rgba(14, 10, 32, 0.96) 0%, rgba(7, 11, 20, 0.98) 100%);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	display: flex;
+	flex-direction: column;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s ease;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+.solar-menu-overlay.is-open {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+}
+
+/* Prevent body scroll when solar menu is open */
+body.solar-menu-portal-open {
+	overflow: hidden !important;
+}
+
+body.solar-menu-portal-open .solar-floating-launcher {
+	display: none !important;
+}
+
+/* Solar Portal Topbar */
+.solar-portal-topbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: calc(0.75rem + env(safe-area-inset-top, 0px)) calc(1.5rem + env(safe-area-inset-right, 0px)) 0.75rem calc(1.5rem + env(safe-area-inset-left, 0px));
+	background: linear-gradient(180deg, rgba(7, 11, 20, 0.95) 0%, rgba(7, 11, 20, 0.7) 100%);
+	border-bottom: 1.5px solid rgba(0, 240, 255, 0.25);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	z-index: 25;
+	flex-shrink: 0;
+	gap: 1.25rem;
+	box-sizing: border-box;
+}
+
+.solar-portal-branding {
+	display: flex;
+	align-items: center;
+	gap: 0.9rem;
+}
+
+.solar-portal-icon-wrap {
+	position: relative;
+	width: 38px;
+	height: 38px;
+	border-radius: 50%;
+	background: rgba(255, 183, 3, 0.12);
+	border: 1.5px solid rgba(255, 183, 3, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 0 16px rgba(255, 183, 3, 0.4);
+	flex-shrink: 0;
+}
+
+.solar-portal-sun {
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	background: radial-gradient(circle, #fff 15%, #ffb703 65%, #ff5722 100%);
+	box-shadow: 0 0 12px #ffb703;
+}
+
+.solar-portal-ring {
+	position: absolute;
+	width: 30px;
+	height: 12px;
+	border-radius: 50%;
+	border: 1.5px solid rgba(0, 240, 255, 0.7);
+	transform: rotate(-25deg);
+	pointer-events: none;
+	animation: cosmic-orbit-spin 6s linear infinite;
+}
+
+@keyframes cosmic-orbit-spin {
+	0% { transform: rotate(-25deg); }
+	50% { transform: rotate(155deg) scaleY(0.7); }
+	100% { transform: rotate(335deg); }
+}
+
+.solar-portal-titles {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+}
+
+.solar-portal-badge-row {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+}
+
+.solar-portal-badge-row .science-badge {
+	margin: 0;
+	font-size: 0.65rem;
+	padding: 2px 7px;
+}
+
+.solar-portal-live-tag {
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.62rem;
+	font-weight: 800;
+	color: #00f0ff;
+	letter-spacing: 0.12em;
+}
+
+.solar-portal-title {
+	margin: 0;
+	font-size: 1.25rem;
+	font-weight: 900;
+	color: #ffffff;
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+}
+
+.solar-portal-filters {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	background: rgba(14, 10, 32, 0.85);
+	padding: 0.25rem 0.4rem;
+	border-radius: 999px;
+	border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.solar-portal-controls {
+	display: flex;
+	align-items: center;
+	gap: 0.65rem;
+}
+
+.solar-portal-close-btn {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	padding: 0.35rem 0.85rem;
+	border-radius: 999px;
+	background: rgba(239, 68, 68, 0.15);
+	border: 1.5px solid rgba(239, 68, 68, 0.5);
+	color: #ffffff;
+	cursor: pointer;
+	transition: all 0.22s ease;
+	outline: none;
+}
+
+.solar-portal-close-btn:hover {
+	background: rgba(239, 68, 68, 0.4);
+	border-color: #ef4444;
+	box-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
+	transform: scale(1.05);
+}
+
+.close-x {
+	font-size: 1.3rem;
+	line-height: 1;
+	font-weight: 700;
+}
+
+.close-esc-hint {
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.68rem;
+	font-weight: 700;
+	color: rgba(248, 249, 250, 0.65);
+	letter-spacing: 0.08em;
+}
+
+/* Stage inside the portal overlay takes the rest of the screen */
+.solar-menu-overlay .solar-stage-container {
+	position: relative;
+	width: 100%;
+	flex: 1;
+	height: calc(100vh - 65px);
+	border-radius: 0;
+	border: none;
+	box-shadow: none;
+	background: transparent;
+}
+
+/* Solar Interactive Canvas Stage */
+.solar-stage-container {
+	position: relative;
+	width: 100%;
+	height: 720px;
+	border-radius: 24px;
+	border: 1.5px solid rgba(0, 240, 255, 0.3);
+	background: #04060d;
+	overflow: hidden;
+	box-shadow: 
+		0 20px 60px rgba(0, 0, 0, 0.85),
+		0 0 40px rgba(0, 240, 255, 0.15),
+		inset 0 0 40px rgba(0, 0, 0, 0.8);
+	transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.solar-menu-canvas {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+/* Fullscreen Simulation Mode */
+.solar-stage-container.is-fullscreen-simulation {
+	position: fixed !important;
+	inset: 0 !important;
+	width: 100vw !important;
+	height: 100vh !important;
+	border-radius: 0 !important;
+	border: none !important;
+	z-index: 999999 !important;
+	box-shadow: none !important;
+	animation: solar-fullscreen-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes solar-fullscreen-in {
+	0% { opacity: 0; transform: scale(0.96); }
+	100% { opacity: 1; transform: scale(1); }
+}
+
+/* HUD Telemetry (Bottom Left) */
+.solar-hud-telemetry {
+	position: absolute;
+	left: 1.5rem;
+	bottom: 1.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+	padding: 0.75rem 1.1rem;
+	border-radius: 12px;
+	background: rgba(7, 11, 20, 0.88);
+	border: 1px solid rgba(0, 240, 255, 0.25);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	pointer-events: none;
+	z-index: 20;
+}
+
+.solar-tele-row {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.75rem;
+}
+
+.solar-tele-label {
+	color: rgba(248, 249, 250, 0.55);
+	letter-spacing: 0.08em;
+}
+
+.solar-tele-val {
+	color: var(--wp--preset--color--starlight-cyan);
+	font-weight: 700;
+	letter-spacing: 0.05em;
+}
+
+/* Compact Contextual Anchored Floating Popout Tooltip (Akıllı Ekran İçi Kenetleme) */
+.solar-popout-card {
+	position: absolute;
+	width: clamp(230px, 22vw, 290px);
+	background: rgba(12, 9, 28, 0.96);
+	border: 1.5px solid rgba(0, 240, 255, 0.6);
+	border-radius: 14px;
+	padding: 0.85rem 1rem;
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	box-shadow: 
+		0 12px 36px rgba(0, 0, 0, 0.95),
+		0 0 25px rgba(0, 240, 255, 0.35),
+		inset 0 0 15px rgba(123, 44, 191, 0.25);
+	z-index: 50;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	opacity: 0;
+	transform: scale(0.92);
+	pointer-events: none;
+	transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Tooltip dynamic pointer caret */
+.solar-popout-card::after {
+	content: '';
+	position: absolute;
+	left: var(--caret-left, 50%);
+	bottom: -7px;
+	transform: translateX(-50%) rotate(45deg);
+	width: 12px;
+	height: 12px;
+	background: rgba(12, 9, 28, 0.96);
+	border-right: 1.5px solid rgba(0, 240, 255, 0.6);
+	border-bottom: 1.5px solid rgba(0, 240, 255, 0.6);
+	transition: left 0.15s ease;
+}
+
+.solar-popout-card.is-flipped-down::after {
+	bottom: auto;
+	top: -7px;
+	transform: translateX(-50%) rotate(-135deg);
+	border-right: none;
+	border-bottom: none;
+	border-left: 1.5px solid rgba(0, 240, 255, 0.6);
+	border-top: 1.5px solid rgba(0, 240, 255, 0.6);
+}
+
+.solar-popout-card.is-active {
+	opacity: 1;
+	transform: scale(1);
+	pointer-events: auto;
+}
+
+.solar-popout-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+}
+
+.solar-popout-badge {
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.62rem;
+	font-weight: 800;
+	letter-spacing: 0.10em;
+	color: var(--wp--preset--color--solar-gold);
+	padding: 0.15rem 0.55rem;
+	border-radius: 999px;
+	background: rgba(255, 183, 3, 0.15);
+	border: 1px solid rgba(255, 183, 3, 0.4);
+	text-transform: uppercase;
+}
+
+.solar-popout-distance {
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.68rem;
+	color: rgba(248, 249, 250, 0.65);
+	letter-spacing: 0.04em;
+}
+
+/* Hide bulky image preview in the compact anchored tooltip to keep it neat and fast */
+.solar-popout-media {
+	display: none;
+}
+
+.solar-popout-body {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+}
+
+.solar-popout-title {
+	margin: 0;
+	font-size: 1.08rem;
+	font-weight: 800;
+	color: #ffffff;
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+}
+
+.solar-popout-sub {
+	font-size: 0.74rem;
+	color: var(--wp--preset--color--starlight-cyan);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	letter-spacing: 0.02em;
+}
+
+.solar-popout-desc {
+	margin: 0.2rem 0 0;
+	font-size: 0.78rem;
+	line-height: 1.45;
+	color: rgba(248, 249, 250, 0.82);
+}
+
+.solar-popout-footer {
+	margin-top: 0.2rem;
+}
+
+.solar-popout-action {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	width: 100%;
+	padding: 0.45rem 0.85rem;
+	border-radius: 999px;
+	background: linear-gradient(135deg, #7b2cbf 0%, #00f0ff 100%);
+	color: #ffffff;
+	font-weight: 700;
+	font-size: 0.78rem;
+	text-decoration: none;
+	box-shadow: 0 4px 14px rgba(0, 240, 255, 0.35);
+	transition: all 0.2s ease;
+}
+
+.solar-popout-action:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 6px 20px rgba(0, 240, 255, 0.55);
+	color: #ffffff;
+}
+
+.solar-popout-arrow {
+	transition: transform 0.2s ease;
+}
+
+.solar-popout-action:hover .solar-popout-arrow {
+	transform: translateX(3px);
+}
+
+/* Canvas Initial Prompt Hint */
+.solar-canvas-hint {
+	position: absolute;
+	top: 1.5rem;
+	left: 50%;
+	transform: translateX(-50%);
+	display: inline-flex;
+	align-items: center;
+	gap: 0.6rem;
+	padding: 0.5rem 1.2rem;
+	border-radius: 999px;
+	background: rgba(14, 10, 32, 0.85);
+	border: 1px solid rgba(0, 240, 255, 0.35);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	color: var(--wp--preset--color--star-white);
+	font-size: 0.85rem;
+	font-weight: 500;
+	pointer-events: none;
+	z-index: 20;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+	transition: opacity 0.4s ease;
+}
+
+.solar-hint-icon {
+	font-size: 1.1rem;
+}
+
+/* Info Grid (Explaining how this works) */
+.solar-lab-info-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1.5rem;
+	margin-top: 3rem;
+}
+
+.solar-info-card {
+	padding: 1.75rem;
+	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.solar-info-icon {
+	font-size: 2.2rem;
+}
+
+.solar-info-title {
+	margin: 0;
+	font-size: 1.25rem;
+	font-weight: 800;
+	color: var(--wp--preset--color--star-white);
+}
+
+.solar-info-p {
+	margin: 0;
+	font-size: 0.92rem;
+	line-height: 1.65;
+	color: rgba(248, 249, 250, 0.8);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+	.solar-lab-info-grid {
+		grid-template-columns: 1fr;
+	}
+	.solar-popout-card {
+		width: 300px;
+		right: 1rem;
+		top: 1rem;
+		padding: 1.1rem;
+	}
+	.solar-stage-container {
+		height: 600px;
+	}
+}
+
+@media (max-width: 768px) {
+	.solar-toolbar-dock {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	.solar-filter-group, .solar-sim-controls {
+		justify-content: center;
+	}
+	.solar-popout-card {
+		position: static;
+		width: 100%;
+		max-height: none;
+		margin-top: 1rem;
+		transform: none !important;
+		opacity: 1 !important;
+		pointer-events: auto !important;
+	}
+	.solar-hud-telemetry {
+		display: none;
+	}
+}
+
+/* ==========================================================================
+   Uzay Görevleri Dönüm Noktaları (Single-Screen Viewport Fit Milestone System)
+   ========================================================================== */
+
+.milestone-viewport-screen {
+	position: relative;
+	width: 100% !important;
+	max-width: 100% !important;
+	height: calc(100vh - 75px);
+	max-height: calc(100vh - 75px);
+	height: calc(100dvh - 75px);
+	max-height: calc(100dvh - 75px);
+	display: flex !important;
+	flex-direction: column !important;
+	justify-content: space-between !important;
+	align-items: center !important;
+	padding: 0.75rem calc(1.5rem + env(safe-area-inset-right, 0px)) calc(1.25rem + env(safe-area-inset-bottom, 0px)) calc(1.5rem + env(safe-area-inset-left, 0px));
+	box-sizing: border-box;
+	overflow: hidden;
+	background: transparent;
+	z-index: 10;
+	overscroll-behavior: contain;
+}
+
+/* Header Row */
+.milestone-screen-header {
+	width: 100% !important;
+	max-width: 1100px !important;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	flex-shrink: 0;
+	z-index: 20;
+	padding: 0.25rem 0;
+}
+
+.milestone-title-group {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.milestone-mini-tag {
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.65rem;
+	font-weight: 800;
+	letter-spacing: 0.14em;
+	color: var(--wp--preset--color--solar-gold);
+	padding: 0.2rem 0.6rem;
+	border-radius: 999px;
+	background: rgba(255, 183, 3, 0.12);
+	border: 1px solid rgba(255, 183, 3, 0.35);
+}
+
+.milestone-screen-title {
+	margin: 0;
+	font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+	font-weight: 800;
+	color: #ffffff;
+	letter-spacing: -0.01em;
+}
+
+.milestone-inline-hint {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.3rem 0.85rem;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	font-size: 0.75rem;
+	color: rgba(248, 249, 250, 0.7);
+}
+
+.milestone-mouse-icon {
+	animation: cosmic-mouse-bob 1.6s infinite ease-in-out;
+}
+
+.milestone-screen-dock {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	background: rgba(14, 10, 32, 0.9);
+	border: 1.5px solid rgba(0, 240, 255, 0.4);
+	padding: 0.25rem 0.65rem;
+	border-radius: 999px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+}
+
+.milestone-dock-btn {
+	position: relative;
+	background: rgba(0, 240, 255, 0.14);
+	border: 1px solid rgba(0, 240, 255, 0.5);
+	color: #00f0ff;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.8rem;
+	cursor: pointer;
+	touch-action: manipulation;
+	transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+	outline: none;
+}
+
+/* 44x44px touch ergonomics target area */
+.milestone-dock-btn::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 44px;
+	height: 44px;
+	transform: translate(-50%, -50%);
+	pointer-events: auto;
+}
+
+.milestone-dock-btn:hover {
+	background: rgba(0, 240, 255, 0.35);
+	transform: scale(1.1);
+}
+
+.milestone-dock-btn:active {
+	transform: scale(0.92);
+	background: rgba(0, 240, 255, 0.5);
+}
+
+.milestone-dock-counter {
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.88rem;
+	font-weight: 800;
+	color: #ffffff;
+	padding: 0 0.4rem;
+}
+
+/* Center Theater Stage - Asla 0px yüksekliğe çökmez, içeriği kırpmaz */
+.milestone-center-theater {
+	position: relative;
+	width: 100% !important;
+	max-width: 1050px !important;
+	flex: 1 1 auto;
+	min-height: 280px;
+	height: clamp(280px, 48vh, 380px);
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	margin: 0.5rem auto !important;
+	overflow: visible !important;
+	z-index: 30 !important;
+}
+
+.milestone-slide {
+	position: absolute;
+	inset: 0;
+	width: 100% !important;
+	height: 100% !important;
+	display: none !important;
+	align-items: center !important;
+	justify-content: center !important;
+	opacity: 0;
+	pointer-events: none;
+	z-index: 1;
+}
+
+.milestone-slide.is-active {
+	display: flex !important;
+	opacity: 1 !important;
+	pointer-events: auto !important;
+	z-index: 35 !important;
+	animation: milestone-card-fade 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.milestone-slide.is-active.slide-from-right {
+	animation: milestone-slide-in-right 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.milestone-slide.is-active.slide-from-left {
+	animation: milestone-slide-in-left 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes milestone-card-fade {
+	0% {
+		opacity: 0;
+		transform: translateY(12px) scale(0.97);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+@keyframes milestone-slide-in-right {
+	0% {
+		opacity: 0;
+		transform: translateX(45px) scale(0.96);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0) scale(1);
+	}
+}
+
+@keyframes milestone-slide-in-left {
+	0% {
+		opacity: 0;
+		transform: translateX(-45px) scale(0.96);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0) scale(1);
+	}
+}
+
+/* Unified Compact Glass Card - Kristal netliğinde görünür uzay görevi haber kartı */
+.milestone-card-unified {
+	display: grid !important;
+	grid-template-columns: 290px 1fr !important;
+	gap: 1.75rem !important;
+	width: 100% !important;
+	max-width: 980px !important;
+	min-height: 250px;
+	height: auto;
+	max-height: 350px;
+	padding: 1.25rem 1.75rem !important;
+	border-radius: 20px !important;
+	border: 1.5px solid rgba(0, 240, 255, 0.45) !important;
+	background: rgba(12, 10, 28, 0.94) !important;
+	box-shadow: 
+		0 20px 60px rgba(0, 0, 0, 0.9), 
+		0 0 35px rgba(0, 240, 255, 0.22),
+		inset 0 0 25px rgba(123, 44, 191, 0.25) !important;
+	backdrop-filter: blur(16px) !important;
+	-webkit-backdrop-filter: blur(16px) !important;
+	align-items: center !important;
+	box-sizing: border-box !important;
+	position: relative !important;
+	z-index: 40 !important;
+	overflow: hidden;
+}
+
+.milestone-card-media {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	min-height: 200px;
+	max-height: 230px;
+	border-radius: 14px;
+	overflow: hidden;
+	border: 1.5px solid rgba(255, 255, 255, 0.18);
+	background: #000;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+}
+
+.milestone-card-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.4s ease;
+}
+
+.milestone-card-media:hover .milestone-card-img {
+	transform: scale(1.06);
+}
+
+.milestone-card-year {
+	position: absolute;
+	top: 0.6rem;
+	right: 0.6rem;
+	padding: 0.25rem 0.75rem;
+	border-radius: 999px;
+	background: rgba(7, 11, 20, 0.92);
+	border: 1.5px solid #ffb703;
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.8rem;
+	font-weight: 800;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+	z-index: 5;
+}
+
+.milestone-card-content {
+	display: flex;
+	flex-direction: column;
+	gap: 0.65rem;
+	overflow: hidden;
+}
+
+.milestone-card-meta {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+}
+
+.milestone-card-badge {
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.68rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	padding: 0.2rem 0.65rem;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(0, 240, 255, 0.4);
+	text-transform: uppercase;
+}
+
+.milestone-card-date {
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.75rem;
+	color: rgba(248, 249, 250, 0.6);
+}
+
+.milestone-card-heading {
+	margin: 0;
+	font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+	font-weight: 900;
+	color: #ffffff;
+	font-family: var(--wp--preset--font-family--heading, sans-serif);
+	line-height: 1.25;
+}
+
+.milestone-card-desc {
+	margin: 0;
+	font-size: 0.88rem;
+	line-height: 1.55;
+	color: rgba(248, 249, 250, 0.85);
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.milestone-pills-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-top: 0.25rem;
+}
+
+.milestone-pill-box {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.35rem 0.75rem;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.72rem;
+}
+
+.pill-label {
+	color: rgba(248, 249, 250, 0.55);
+}
+
+.pill-value {
+	color: var(--wp--preset--color--starlight-cyan);
+	font-weight: 700;
+}
+
+/* ==========================================================================
+   Bottom Milestone Horizontal Pipeline (TeamGantt Style)
+   ========================================================================== */
+
+.milestone-bottom-rail {
+	position: relative;
+	width: 100%;
+	height: 120px;
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	overflow: visible;
+}
+
+.milestone-rail-track-wrap {
+	position: relative;
+	width: 100%;
+	max-width: 1100px;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	margin: 0 auto;
+}
+
+/* Continuous thick pipeline bar */
+.milestone-pipeline-bg {
+	position: absolute;
+	left: 20px;
+	right: 20px;
+	top: 50%;
+	height: 10px;
+	transform: translateY(-50%);
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.12);
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	z-index: 1;
+}
+
+.milestone-pipeline-fill {
+	position: absolute;
+	left: 20px;
+	top: 50%;
+	height: 10px;
+	width: 0%;
+	transform: translateY(-50%);
+	border-radius: 999px;
+	background: linear-gradient(90deg, #ff5722 0%, #ffb703 35%, #00f0ff 70%, #a855f7 100%);
+	box-shadow: 0 0 16px rgba(0, 240, 255, 0.6);
+	z-index: 2;
+	transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+/* Milestone Pins Container */
+.milestone-pins-container {
+	position: relative;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	z-index: 5;
+	padding: 0 15px;
+	box-sizing: border-box;
+}
+
+/* Individual Milestone Node */
+.milestone-node {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	cursor: pointer;
+	transition: transform 0.22s ease;
+	user-select: none;
+}
+
+.milestone-node:hover {
+	transform: scale(1.08);
+}
+
+/* Pin Center Button (Ring with Core) */
+.milestone-pin-btn {
+	position: relative;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	border: 3.5px solid var(--node-accent, #00f0ff);
+	background: #070b14;
+	cursor: pointer;
+	touch-action: manipulation;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 0 12px var(--node-accent, rgba(0, 240, 255, 0.5));
+	transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	z-index: 6;
+	outline: none;
+	padding: 0;
+}
+
+/* 48x48px hit area expander for touch ergonomics */
+.milestone-pin-btn::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 48px;
+	height: 48px;
+	transform: translate(-50%, -50%);
+	pointer-events: auto;
+}
+
+.milestone-node:active .milestone-pin-btn {
+	transform: scale(1.15);
+}
+
+.milestone-node.is-completed .milestone-pin-btn {
+	background: var(--node-accent, #00f0ff);
+	box-shadow: 0 0 14px var(--node-accent, #00f0ff);
+}
+
+.milestone-node.is-completed .pin-core {
+	background: #ffffff;
+}
+
+.milestone-node.is-active .milestone-pin-btn {
+	transform: scale(1.3);
+	background: #ffffff;
+	border-color: var(--node-accent, #00f0ff);
+	box-shadow: 0 0 25px var(--node-accent, #00f0ff), 0 0 40px rgba(255, 255, 255, 0.6);
+}
+
+.pin-core {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: var(--node-accent, #00f0ff);
+	transition: background 0.25s ease;
+}
+
+.milestone-node.is-active .pin-core {
+	background: var(--node-accent, #00f0ff);
+}
+
+/* Radiating Pulse Wave for Active Pin */
+.pin-halo {
+	position: absolute;
+	inset: -6px;
+	border-radius: 50%;
+	border: 2px solid var(--node-accent, #00f0ff);
+	opacity: 0;
+	pointer-events: none;
+}
+
+.milestone-node.is-active .pin-halo {
+	animation: milestone-halo-pulse 1.8s infinite ease-out;
+}
+
+/* Callouts (Alternating Top / Bottom) */
+.milestone-callout {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	white-space: nowrap;
+	pointer-events: none;
+	transition: all 0.25s ease;
+}
+
+/* Top Callout (Odd Nodes) */
+.milestone-node.node-callout-top .milestone-callout {
+	bottom: 38px;
+}
+
+.milestone-node.node-callout-top .callout-pointer-stem {
+	width: 2px;
+	height: 10px;
+	background: var(--node-accent, #00f0ff);
+	margin-top: 3px;
+	border-radius: 2px;
+	box-shadow: 0 0 6px var(--node-accent, #00f0ff);
+}
+
+/* Bottom Callout (Even Nodes) */
+.milestone-node.node-callout-bottom .milestone-callout {
+	top: 38px;
+}
+
+.milestone-node.node-callout-bottom .callout-pointer-stem {
+	width: 2px;
+	height: 10px;
+	background: var(--node-accent, #00f0ff);
+	margin-bottom: 3px;
+	order: -1;
+	border-radius: 2px;
+	box-shadow: 0 0 6px var(--node-accent, #00f0ff);
+}
+
+.callout-year {
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.68rem;
+	font-weight: 800;
+	color: var(--node-accent, #ffb703);
+	letter-spacing: 0.05em;
+}
+
+.callout-text {
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: var(--wp--preset--color--star-white);
+	opacity: 0.85;
+}
+
+.milestone-node.is-active .callout-text {
+	opacity: 1;
+	color: var(--node-accent, #00f0ff);
+	text-shadow: 0 0 10px var(--node-accent, rgba(0, 240, 255, 0.6));
+}
+
+.node-short-label {
+	position: absolute;
+	font-size: 0.68rem;
+	color: rgba(248, 249, 250, 0.5);
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	white-space: nowrap;
+}
+
+.milestone-node.node-callout-top .node-short-label {
+	top: 38px;
+}
+
+.milestone-node.node-callout-bottom .node-short-label {
+	bottom: 38px;
+}
+
+.milestone-node.is-active .node-short-label {
+	color: var(--wp--preset--color--star-white);
+	font-weight: 700;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+	.milestone-card-unified {
+		grid-template-columns: 1fr;
+		padding: 1rem;
+		gap: 0.75rem;
+	}
+	.milestone-card-media {
+		max-height: 140px;
+	}
+	.milestone-inline-hint {
+		display: none;
+	}
+	.milestone-bottom-rail {
+		overflow-x: auto;
+	}
+	.milestone-rail-track-wrap {
+		min-width: 750px;
+	}
+}
+
+/* iOS & Mobile Screen Adjustments */
+@media (max-width: 680px) {
+	.milestone-viewport-screen {
+		padding: 0.5rem calc(0.75rem + env(safe-area-inset-right, 0px)) calc(0.85rem + env(safe-area-inset-bottom, 0px)) calc(0.75rem + env(safe-area-inset-left, 0px));
+		height: auto;
+		min-height: calc(100dvh - 65px);
+		max-height: none;
+	}
+	.milestone-card-unified {
+		padding: 0.85rem 1rem !important;
+		gap: 0.6rem !important;
+		max-height: none;
+		min-height: auto;
+	}
+	.milestone-card-media {
+		max-height: 120px;
+		min-height: 110px;
+	}
+	.milestone-card-text {
+		font-size: 0.82rem;
+		line-height: 1.45;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+	.milestone-center-theater {
+		min-height: 230px;
+		height: auto;
+	}
+	.solar-portal-topbar {
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		padding: calc(0.5rem + env(safe-area-inset-top, 0px)) 0.75rem 0.5rem;
+	}
+	.solar-portal-title {
+		font-size: 1rem;
+	}
+	.solar-portal-filters {
+		order: 3;
+		width: 100%;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	.solar-filter-btn {
+		white-space: nowrap;
+		flex-shrink: 0;
+		min-height: 44px;
+		padding: 0.5rem 1.1rem;
+	}
+	.solar-ctrl-btn {
+		min-height: 44px;
+		padding: 0.5rem 1rem;
+	}
+}
+
+/* iOS Landscape Notch Accommodation */
+@media (orientation: landscape) and (max-height: 500px) {
+	.milestone-viewport-screen {
+		height: auto;
+		min-height: 100dvh;
+		padding: 0.5rem calc(2rem + env(safe-area-inset-right, 0px)) calc(0.75rem + env(safe-area-inset-bottom, 0px)) calc(2rem + env(safe-area-inset-left, 0px));
+	}
+	.milestone-center-theater {
+		min-height: 200px;
+	}
+	.milestone-card-unified {
+		grid-template-columns: 180px 1fr !important;
+		max-height: 220px;
+	}
+	.milestone-card-media {
+		max-height: 160px;
+		min-height: 140px;
+	}
+}
+
+
+
+
+
+
+/* ==========================================================================
+   Cosmic Chapter Navigation & Divider Architecture
+   ========================================================================== */
+
+.cosmic-chapter-nav {
+	position: relative;
+	z-index: 10;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0.5rem 0.85rem;
+	background: rgba(9, 13, 23, 0.9);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	border-radius: 10px;
+	max-width: 960px;
+	margin: 1.5rem auto 2.5rem;
+	box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
+	transition: all 0.25s ease;
+}
+
+.cosmic-chapter-nav__container {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	overflow-x: auto;
+	max-width: 1200px;
+	width: 100%;
+	justify-content: center;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	padding: 0.2rem 0.3rem;
+}
+
+.cosmic-chapter-nav__container::-webkit-scrollbar {
+	display: none;
+}
+
+.cosmic-chapter-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45rem;
+	padding: 0.42rem 0.9rem;
+	border-radius: 6px;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.09);
+	color: #cbd5e1;
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.76rem;
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	text-decoration: none;
+	white-space: nowrap;
+	transition: all 0.2s ease;
+}
+
+.cosmic-chapter-btn:hover {
+	background: rgba(2, 132, 199, 0.2);
+	border-color: #38bdf8;
+	color: #ffffff;
+	transform: translateY(-1px);
+}
+
+.cosmic-chapter-btn .num-pill {
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.68rem;
+	font-weight: 800;
+	color: #38bdf8;
+	background: rgba(56, 189, 248, 0.12);
+	border: 1px solid rgba(56, 189, 248, 0.3);
+	padding: 1px 5px;
+	border-radius: 3px;
+}
+
+/* Chapter Divider Banners & Scroll Margin for Anchor Navigation */
+.cosmic-chapter-divider,
+#bolum-gunes-sistemi,
+#bolum-derin-uzay,
+#bolum-kozmik-fizik,
+#bolum-uzay-tarihi,
+#bilgi-testi,
+#karadelikler,
+.kerr-sim-container,
+#kesif-tarihi,
+#cosmicMilestoneApp {
+	scroll-margin-top: 135px;
+}
+
+.cosmic-chapter-divider {
+	padding: 4.5rem 1.5rem 3rem;
+	text-align: center;
+	position: relative;
+	background: radial-gradient(ellipse at 50% 50%, rgba(15, 23, 42, 0.75) 0%, rgba(7, 10, 19, 0.98) 100%);
+	border-top: 1px solid rgba(255, 255, 255, 0.08);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	margin: 2.5rem 0 1rem;
+}
+
+.cosmic-chapter-divider::before {
+	content: '';
+	position: absolute;
+	top: -1px;
+	left: 20%;
+	right: 20%;
+	height: 2px;
+	background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.4), transparent);
+}
+
+.chapter-roman-tag {
+	display: inline-block;
+	font-family: var(--wp--preset--font-family--mono, monospace);
+	font-size: 0.72rem;
+	font-weight: 800;
+	letter-spacing: 0.14em;
+	color: #38bdf8;
+	padding: 0.25rem 0.85rem;
+	border-radius: 4px;
+	background: rgba(2, 132, 199, 0.12);
+	border: 1px solid rgba(56, 189, 248, 0.35);
+	margin-bottom: 1rem;
+	text-transform: uppercase;
+}
+
+.chapter-title {
+	font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+	font-weight: 800;
+	color: #ffffff;
+	margin: 0 0 0.75rem;
+	letter-spacing: -0.025em;
+	text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
+}
+
+.chapter-subtitle {
+	font-size: 1.05rem;
+	color: var(--wp--preset--color--dust-gray);
+	max-width: 680px;
+	margin: 0 auto;
+	line-height: 1.6;
+}
